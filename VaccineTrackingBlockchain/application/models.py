@@ -41,8 +41,8 @@ number_of_doses = [
 class Vaccination(models.Model):
     ssid = models.CharField(max_length=200,default="",blank=True,null=True)
     name = models.CharField(max_length=200,default="",blank=True,null=True)
-    age = models.CharField(max_length=200,default="",blank=True,null=True)
-    gender = models.CharField(max_length=200,default="",blank=True,null=True)
+    age = models.IntegerField(default=-1,blank=True,null=True)
+    gender = models.BooleanField(default=False)
     address = models.CharField(max_length=200,default="",blank=True,null=True)
     status = models.CharField(max_length=50, choices=status_vaccination , default="pending")
     vaccine_brand = models.ForeignKey(Vaccine,on_delete=models.CASCADE)
