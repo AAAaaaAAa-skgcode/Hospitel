@@ -4,5 +4,6 @@ from .models import *
 
 admin.site.register(Hospital)
 admin.site.register(Vaccine)
+admin.site.register(Symptom)
 admin.site.register(AvailabeVaccines)
 admin.site.register(Vaccination)
