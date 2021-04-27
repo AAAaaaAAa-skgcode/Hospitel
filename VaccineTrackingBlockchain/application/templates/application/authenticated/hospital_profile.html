@@ -1,0 +1,8 @@
+{% load static%}
+<h1>Hospital Profile</h1>
+<hr>
+{{current_hospital.name}}<br>
+{{current_hospital.country}} , {{current_hospital.city}}<br>
+{{current_hospital.steet}} {{current_hospital.number}} {{current_hospital.postal_code}}
+<hr>
+<a href='{% url "logout_view" %}'>Logout</a>

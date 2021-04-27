@@ -1,0 +1,42 @@
+{% load static%}
+<h1>Sign Up</h1>
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="fieldWrapper">
+            {{field.label_tag}}
+            {{ field }}
+        </div>
+    {% endfor %}
+    <label for="name">Hospital Name: </label>
+    <input id="name" name="name" required>
+    <br>
+
+    <label for="country">Country: </label>
+    <input id="country" name="country" required>
+    <br>
+
+    <label for="city">City: </label>
+    <input id="city" name="city" required>
+    <br>
+
+    <label for="street">Street: </label>
+    <input id="street" name="street" required>
+    <br>
+
+    <label for="number">Number: </label>
+    <input id="number" type="number" name="number" required>
+    <br>
+
+    <label for="postal_code">Postal code: </label>
+    <input id="postal_code" type="number" name="postal_code" required>
+    <br>
+
+    <button type="submit">Submit</button>
+</form>
+<hr>
+<a href='{% url "login" %}'>Sign In</a>
+<hr>
+{% if err != None%}
+    {{err}}
+{% endif %}
