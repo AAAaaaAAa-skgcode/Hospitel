@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css"
+    />
+    <link rel="stylesheet" href="{% static 'index.css' %}"/>
+  </head>
+  <body>
+    <div class="profile-container">
+      <header class="profile-header">
+        <div class="header_avatar">
+          <i class="fas fa-sign-out-alt"></i>
+          <a href='{% url "logout_view" %}'>Logout</a>
+        </div>
+      </header>
+      <aside class="profile-aside">
+        <img src="{% static 'img/logo.png' %}" alt="logo" class="profile-logo" />
+        <nav class="profile-aside_nav">
+          <ul class="profile-aside_list">
+            <li class="profile-aside_list-item">
+              <a class="profile-aside_list-link"><i class="fas fa-syringe"></i>Add Vaccination</a>
+            </li>
+            <li class="profile-aside_list-item">
+              <a class="profile-aside_list-link"><i class="fas fa-folder-open"></i>All Vaccinations</a>
+            </li>
+            <li class="profile-aside_list-item">
+              <a  class="profile-aside_list-link"><i class="far fa-chart-bar"></i>Statistics</a>
+            </li>
+            <li class="profile-aside_list-item">
+              <a  class="profile-aside_list-link"><i class="fas fa-user"></i>Profile</a>
+            </li>
+        </ul>
+        <nav>
+      </aside>
+      <main class="main">
+        <div class="container-main">
+          <div class="container-info">
+            <p class="form_message-p"><i class="far fa-hospital"></i>Hospital Information</p>
+          </div>
+          <form action="">
+            <div class="container-form">
+              <div class="container-sesion">
+                <div class="input-container">
+                  <i class="far fa-hospital icon"></i>
+                  <input
+                    class="input-field"
+                    type="text"
+                    placeholder="Hospital Name"
+                    name="hospital-name"
+                    id="hospital-name"
+                    required
+                    autocomplete="off"
+                    value={{current_hospital.name}}
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fas fa-at icon"></i>
+                  <input
+                    class="input-field"
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    id="email"
+                    required
+                    autocomplete="off"
+                    value={{user.email}}
+                  />
+                </div>
+                <div class="input-container">
+                <div class="input-container-column">
+                    <i class="fas fa-street-view icon"></i>
+                    <input
+                      class="input-field"
+                      type="text"
+                      placeholder="Street,Number"
+                      name="street"
+                      id="street"
+                      required
+                      autocomplete="off"
+                      value={{current_hospital.street}}
+                    />
+                  </div>
+                  <div class="input-container-column">
+                    <i class="fas fa-city icon"></i>
+                    <input
+                      class="input-field"
+                      type="text"
+                      placeholder="City"
+                      name="city"
+                      id="city"
+                      required
+                      autocomplete="off"
+                      value={{current_hospital.city}}
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <div class="input-container-column">
+                    <i class="fas fa-globe-europe icon"></i>
+                    <input
+                      class="input-field"
+                      type="text"
+                      placeholder="Country"
+                      name="country"
+                      id="country"
+                      required
+                      autocomplete="off"
+                      value={{current_hospital.country}}
+                    />
+                  </div>
+                  <div class="input-container-column">
+                    <i class="fas fa-map-pin icon"></i>
+                    <input
+                      class="input-field"
+                      type="text"
+                      placeholder="Postal Code"
+                      name="postal-code"
+                      id="postal-code"
+                      required
+                      autocomplete="off"
+                      value={{current_hospital.postal_code}}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="container-sesion">
+                <div class="container-input-info">
+                  Available doses
+                </div>
+                <div class="input-container-column">
+                <i class="fas fa-syringe icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    placeholder="Doses"
+                    name="available-doses"
+                    id="available-doses"
+                  />
+                </div>
+              </div>
+              <button type="submit" class="submit-button">Update</button>
+            </div>
+          </form>
+        </div>
+      </main>
+      <footer class="profile-footer">
+        <div class="footer">
+          <div class="footer-row">
+            <div class="footer-div-column">
+              <img src="{% static 'img/logo.png' %}" alt="logo" class="footer-img" />
+              <p class="footer-div-p">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </div>
+            <div class="footer-div-row">
+              <div class="footer-div-ul">
+                <a href="">About Us</a>
+                <a href="">Contact</a>
+                <a href="">Support</a>
+              </div>
+            </div>
+            <div class="footer-div-column">
+              <h4 class="footer-div-h2">Contact us</h4>
+              <ul class="footer-div-ul">
+                <li>
+                  <a href=""><i class="fas fa-mobile-alt"></i> +88 0123 456 789</a>
+                </li>
+                <li>
+                  <a href=""><i class="far fa-envelope"></i> info@demo.com</a>
+                </li>
+              </ul>
+              <div class="footer-social">
+                <a href=""><i class="fab fa-facebook-f"></i></a>
+                <a href=""><i class="fab fa-twitter"></i></a>
+                <a href=""><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </div>
+          </div>
+            <div class="footer-row-copy">
+              <p>&copy; 2020 all rights reserved. Made with &hearts;</p>
+          <div> 
+        </div> 
+    </footer>
+  </div>
+    <script src="" async defer></script>
+  </body>
+</html>

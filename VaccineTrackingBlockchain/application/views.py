@@ -16,6 +16,9 @@ import requests
 @unauthenticated_user
 def login(request):
     if request.method == 'POST':
+        login_key = request.POST.get('login_key',False)
+        if login_key == False:
+            return register(request)
         username = request.POST.get('email')
         password = request.POST.get('password')
 
@@ -27,8 +30,8 @@ def login(request):
         else:
             err = "Email or password is wrong."
             context = {'err':err}
-            return render(request,'application/landing/login.html',context)
-    return render(request,'application/landing/login.html')
+            return render(request,'application/landing/index.html',context)
+    return render(request,'application/landing/index.html')
 @unauthenticated_user
 def register(request):
     form = NewUserForm()
@@ -44,21 +47,21 @@ def register(request):
                 user = User.objects.create_user(username=email,email=email,password = raw_password)
                 hospital = Hospital.objects.create(
                         user = user,
-                        name = request.POST.get('name'),
+                        name = request.POST.get('hospital-name'),
                         country = request.POST.get('country'),
                         city = request.POST.get('city'),
                         street = request.POST.get('street'),
                         number = request.POST.get('number'),
-                        postal_code = request.POST.get('postal_code')
+                        postal_code = request.POST.get('postal-code')
                 )
                 auth_login(request,user)
                 return redirect("hospital_profile")
             err = "E-mail already exist."
-            return render(request, 'application/landing/register.html',{'form':form,'err':err})
+            return render(request, 'application/landing/index.html',{'form':form,'err':err})
         else:
             err = form.errors
     
-    return render(request, 'application/landing/register.html',{'form':form,'err':err})
+    return render(request, 'application/landing/index.html',{'form':form,'err':err})
 
 @login_required(login_url="login")  
 def logout_view(request):
@@ -70,6 +73,6 @@ def hospital_profile(request):
     current_user = request.user
     current_hospital = Hospital.objects.get(user=current_user)
     context = {'current_hospital':current_hospital}
-    return render(request, 'application/authenticated/hospital_profile.html',context)
+    return render(request, 'application/authenticated/profile.html',context)
 
 
