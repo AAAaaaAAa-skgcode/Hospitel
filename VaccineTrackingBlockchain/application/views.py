@@ -73,6 +73,35 @@ def hospital_profile(request):
     current_user = request.user
     current_hospital = Hospital.objects.get(user=current_user)
     context = {'current_hospital':current_hospital}
+
+    if request.method=="POST":
+        name = request.POST.get('hospital-name')
+        country = request.POST.get('country')
+        city = request.POST.get('city')
+        street = request.POST.get('street')
+        number = request.POST.get('number')
+        postal_code = request.POST.get('postal-code')
+        email = request.POST.get('email')
+
+        current_user.email = email
+        current_hospital.name = name
+        current_hospital.country = country
+        current_hospital.city = city
+        current_hospital.street = street
+        current_hospital.number = number
+        current_hospital.postal_code = postal_code
+        
+        #add doses when field is in template
+        #pfizer = Vaccine.objects.get(brand="Pfizer")
+        #avail_pfizer = AvailabeVaccines.objects.get(vaccine=pfizer,hospital=current_hospital)
+        #pfizer_avail_doses = request.POST.get('pfizer-doses')
+        #avail_pfizer = pfizer_avail_doses
+
+        current_user.save()
+        current_hospital.save()
+        context = {'current_hospital':current_hospital}
+        return redirect("/profile")
+    
     return render(request, 'application/authenticated/profile.html',context)
 
 
