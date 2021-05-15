@@ -11,12 +11,21 @@ class Hospital(models.Model):
     street = models.CharField(max_length=200,default="",blank=True,null=True)
     number = models.IntegerField(default=-1,blank=True,null=True)
     postal_code = models.IntegerField(default=-1,blank=True,null=True)
+    
+    
     def __str__(self):
         return (self.name)
 
 class Vaccine(models.Model):
-    brand = models.CharField(max_length=200,default="",blank=True,null=True)
+    COMPANIES = (
+        ('Pfizer', 'Pfizer'),
+        ('AstraZeneca', 'AstraZeneca'),
+        ('Moderna', 'Moderna'),
+        ('Johnson & Johnson', 'Johnson & Johnson')
+    )
+    brand = models.CharField(max_length=200,default="",blank=True, null=True, choices = COMPANIES)
     doses = models.IntegerField(default=-1,blank=True,null=True)
+
 
 class AvailabeVaccines(models.Model):
     hospital = models.ForeignKey(Hospital,on_delete=models.CASCADE)
