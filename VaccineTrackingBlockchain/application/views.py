@@ -148,6 +148,55 @@ def hospital_profile(request):
     return render(request, 'application/authenticated/profile.html',context)
 
 def add_vaccination(request):
+    current_user = request.user
+    current_hospital = Hospital.objects.get(user=current_user)
+
+    if request.method=="POST":
+        ssid = request.POST.get('amka')
+        first_name = request.POST.get('fname')
+        last_name = request.POST.get('lastname')
+        gender = request.POST.get('mySelect')
+        age = request.POST.get('age')
+        address = request.POST.get('street')
+        city = request.POST.get('city')
+        country = request.POST.get('country')
+        postal_code = request.POST.get('postal-code')
+        vbrand = request.POST.get('vbrand')
+        dose_a = request.POST.get('dosea')
+        dose_b = request.POST.get('doseb')
+        completed_doses = request.POST.get('compldoses')
+        status = request.POST.get('status')
+        symptoms = request.POST.get('symptoms')
+
+        try:
+            vaccine_brand = Vaccine.objects.get(brand=vbrand)
+        except Vaccine.DoesNotExist:
+            context = {'err':"Κάτι πήγε στραβά 🍌"}
+            return render(request, 'application/authenticated/add_vaccination.html',context)
+
+        vaccination = Vaccination.objects.create(
+            ssid = ssid,
+            first_name = first_name,
+            last_name = last_name,
+            age = age,
+            gender = gender,
+            address = address,
+            city = city,
+            country = country,
+            postal_code = postal_code,
+            status = status,
+            vaccine_brand = vaccine_brand,
+            completed_doses = completed_doses,
+            symptoms = symptoms,
+            first_dose_date = dose_a,
+            second_dose_date = dose_b,
+            hospital = current_hospital
+        )
+        if vaccination == None:
+            context = {'err':"Κάτι πήγε στραβά"}
+            return render(request, 'application/authenticated/add_vaccination.html',context)
+        return redirect("/addVaccination")
+
     return render(request, 'application/authenticated/add_vaccination.html')
 
 

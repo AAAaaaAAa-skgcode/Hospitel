@@ -45,12 +45,15 @@
                 </ul>
             <nav>
         </aside>
+        
         <main class="main">
             <div class="container-main">
+            <h1 style="color:red">{{err}}</h3>
                 <div class="container-info">
                     <p class="form_message-p"><i class="far fa-plus-square"></i>Add a new vaccination</p>
                 </div>
-                <form action="">
+                <form method="post">
+                    {% csrf_token %}
                     <div class="container-form">
                         <div class="container-sesion">
                             <div class="container-input-info">
@@ -99,7 +102,7 @@
                             <div class="input-container">
                                 <div class="input-container-column">
                                     <i class="fas fa-transgender icon"></i>
-                                    <select id="mySelect" onchange="gender();">
+                                    <select id="mySelect"  name="mySelect" onchange="gender();">
                                         <option value="">Select Gender</option>
                                         <option value="female">Female</option>
                                         <option value="male">Male</option>
@@ -219,17 +222,17 @@
                                 <div class="input-container-column">
                                     <label for="compldoses">Completed Doses</label>
                                     <i class="fas fa-mouse-pointer icon"></i>
-                                    <select id="compldoses">
+                                    <select id="compldoses" name="compldoses">
                                         <option value="">Select</option>
-                                        <option value="zero">0</option>
-                                        <option value="one">1</option>
-                                        <option value="two">2</option>
+                                        <option value=0>0</option>
+                                        <option value=1>1</option>
+                                        <option value=2>2</option>
                                     </select>
                                 </div>
                                 <div class="input-container-column">
                                     <label for="status">Status of Vaccinations</label>
                                     <i class="fas fa-mouse-pointer icon"></i>
-                                    <select id="status">
+                                    <select id="status" name="status">
                                         <option value="">Select</option>
                                         <option value="pending">Pending</option>
                                         <option value="completed">Completed</option>
@@ -240,7 +243,7 @@
                             <div class="input-container">
                                 <div class="input-container-column">
                                     <label for="symptoms">Symptoms</label>
-                                    <textarea id="symptoms" name="w3review" rows="4" cols="50">...</textarea>
+                                    <textarea id="symptoms" name="symptoms" rows="4" cols="50">...</textarea>
                                 </div>
                             </div>    
                         </div>
