@@ -139,7 +139,7 @@
               </div>
               <div class="container-sesion">
                 <div class="container-input-info">
-                  Available doses
+                  Pfizer-BioNTech Available doses
                 </div>
                 <div class="input-container-column">
                 <i class="fas fa-syringe icon"></i>
@@ -147,11 +147,55 @@
                     class="input-field"
                     type="number"
                     placeholder="Doses"
-                    name="available-doses"
-                    id="available-doses"
+                    name="pfizer-doses"
+                    id="pfizer-doses"
+                    value={{current_pfizer.free_amount}}
+                  />
+                </div>
+                <div class="container-input-info">
+                  Moderna Available doses
+                </div>
+                <div class="input-container-column">
+                <i class="fas fa-syringe icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    placeholder="Doses"
+                    name="moderna-doses"
+                    id="moderna-doses"
+                    value={{current_moderna.free_amount}}
+                  />
+                </div>
+                <div class="container-input-info">
+                  Johnson & Johnson’s Janssen Available doses
+                </div>
+                <div class="input-container-column">
+                <i class="fas fa-syringe icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    placeholder="Doses"
+                    name="johnson-doses"
+                    id="johnson-doses"
+                    value={{current_johnson.free_amount}}
+                  />
+                </div>
+                <div class="container-input-info">
+                  AstraZeneca Available doses
+                </div>
+                <div class="input-container-column">
+                <i class="fas fa-syringe icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    placeholder="Doses"
+                    name="astra-doses"
+                    id="astra-doses"
+                    value={{current_astra.free_amount}}
                   />
                 </div>
               </div>
+
               <button type="submit" class="submit-button">Update</button>
             </div>
           </form>

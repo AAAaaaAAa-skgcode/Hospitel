@@ -54,6 +54,27 @@ def register(request):
                         number = request.POST.get('number'),
                         postal_code = request.POST.get('postal-code')
                 )
+                pfizer_vaccine = Vaccine.objects.get(brand='Pfizer')
+                avail_pfizer = AvailabeVaccines.objects.create(
+                    hospital = hospital,
+                    vaccine = pfizer_vaccine
+                )
+                moderna_vaccine = Vaccine.objects.get(brand='Moderna')
+                avail_pfizer = AvailabeVaccines.objects.create(
+                    hospital = hospital,
+                    vaccine = moderna_vaccine
+                )
+                johnson_vaccine = Vaccine.objects.get(brand='Johnson & Johnson')
+                avail_pfizer = AvailabeVaccines.objects.create(
+                    hospital = hospital,
+                    vaccine = johnson_vaccine
+                )
+                astra_vaccine = Vaccine.objects.get(brand='AstraZeneca')
+                avail_pfizer = AvailabeVaccines.objects.create(
+                    hospital = hospital,
+                    vaccine = astra_vaccine
+                )
+        
                 auth_login(request,user)
                 return redirect("hospital_profile")
             err = "E-mail already exist."
@@ -72,7 +93,18 @@ def logout_view(request):
 def hospital_profile(request):
     current_user = request.user
     current_hospital = Hospital.objects.get(user=current_user)
-    context = {'current_hospital':current_hospital}
+    
+    pfizer_vaccine = Vaccine.objects.get(brand='Pfizer')
+    current_pfizer = AvailabeVaccines.objects.get(hospital=current_hospital, vaccine = pfizer_vaccine)
+    
+    moderna_vaccine = Vaccine.objects.get(brand='Moderna')
+    current_moderna = AvailabeVaccines.objects.get(hospital=current_hospital, vaccine = moderna_vaccine)
+    
+    johnson_vaccine = Vaccine.objects.get(brand='Johnson & Johnson')
+    current_johnson = AvailabeVaccines.objects.get(hospital=current_hospital, vaccine = johnson_vaccine)
+    
+    astra_vaccine = Vaccine.objects.get(brand='AstraZeneca')
+    current_astra = AvailabeVaccines.objects.get(hospital=current_hospital, vaccine = astra_vaccine)
 
     if request.method=="POST":
         name = request.POST.get('hospital-name')
@@ -82,6 +114,11 @@ def hospital_profile(request):
         number = request.POST.get('number')
         postal_code = request.POST.get('postal-code')
         email = request.POST.get('email')
+        
+        pfizer_avail_doses = request.POST.get('pfizer-doses')
+        moderna_avail_doses = request.POST.get('moderna-doses')
+        johnson_avail_doses = request.POST.get('johnson-doses')
+        astra_avail_doses = request.POST.get('astra-doses')
 
         current_user.email = email
         current_hospital.name = name
@@ -91,17 +128,23 @@ def hospital_profile(request):
         current_hospital.number = number
         current_hospital.postal_code = postal_code
         
-        #add doses when field is in template
-        #pfizer = Vaccine.objects.get(brand="Pfizer")
-        #avail_pfizer = AvailabeVaccines.objects.get(vaccine=pfizer,hospital=current_hospital)
-        #pfizer_avail_doses = request.POST.get('pfizer-doses')
-        #avail_pfizer = pfizer_avail_doses
+        current_pfizer.free_amount = pfizer_avail_doses
+        current_moderna.free_amount = moderna_avail_doses
+        current_johnson.free_amount = johnson_avail_doses
+        current_astra.free_amount = astra_avail_doses
 
+        current_pfizer.save()
+        current_moderna.save()
+        current_johnson.save()
+        current_astra.save()
+        
         current_user.save()
         current_hospital.save()
-        context = {'current_hospital':current_hospital}
+
+        context = {'current_hospital':current_hospital, 'current_pfizer':current_pfizer,'current_moderna':current_moderna, 'current_johnson':current_johnson, 'current_astra':current_astra}
         return redirect("/profile")
-    
+
+    context = {'current_hospital':current_hospital, 'current_pfizer':current_pfizer,'current_moderna':current_moderna, 'current_johnson':current_johnson, 'current_astra':current_astra}
     return render(request, 'application/authenticated/profile.html',context)
 
 def add_vaccination(request):
