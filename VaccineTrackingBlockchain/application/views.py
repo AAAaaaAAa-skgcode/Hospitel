@@ -104,4 +104,7 @@ def hospital_profile(request):
     
     return render(request, 'application/authenticated/profile.html',context)
 
+def add_vaccination(request):
+    return render(request, 'application/authenticated/add_vaccination.html')
+
 
