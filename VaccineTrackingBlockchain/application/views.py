@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import *
 from .decorators import *
 from .forms import *
@@ -10,6 +10,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 import re
 import requests
+import json
 
 # Create your views here.
 
@@ -170,6 +171,9 @@ def add_vaccination(request):
 
         try:
             vaccine_brand = Vaccine.objects.get(brand=vbrand)
+            current_hospital.amount = current_hospital.amount + 1
+            print(current_hospital.amount)
+            current_hospital.save()
         except Vaccine.DoesNotExist:
             context = {'err':"Κάτι πήγε στραβά 🍌"}
             return render(request, 'application/authenticated/add_vaccination.html',context)
@@ -200,3 +204,51 @@ def add_vaccination(request):
     return render(request, 'application/authenticated/add_vaccination.html')
 
 
+
+@login_required(login_url="login")
+def stats(request):
+    return render(request,'application/authenticated/stats.html')
+
+def resultdata(request):
+    data = {}
+   
+    for hosp in Hospital.objects.filter():
+        data[hosp.name] = hosp.amount
+        print('data',data)
+    
+
+    return JsonResponse(data, safe=False)
+
+
+
+@login_required(login_url="login")
+def statsPerCountrie(request):
+    return render(request,'application/authenticated/countriesStats.html')
+
+def countriesstats(request):
+
+    data = {}
+   
+    for hosp in Hospital.objects.filter():
+        data[hosp.country] = hosp.amount
+        print('data',data)
+    
+
+    return JsonResponse(data, safe=False)
+    
+
+@login_required(login_url="login")
+def statsPerCity(request):
+    return render(request,'application/authenticated/cityStats.html')
+
+def citystats(request):
+
+    data = {}
+   
+    for hosp in Hospital.objects.filter():
+        data[hosp.city] = hosp.amount
+        print('data',data)
+    
+
+    return JsonResponse(data, safe=False)
+    
