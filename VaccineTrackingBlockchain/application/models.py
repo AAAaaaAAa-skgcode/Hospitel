@@ -11,7 +11,8 @@ class Hospital(models.Model):
     street = models.CharField(max_length=200,default="",blank=True,null=True)
     number = models.IntegerField(default=-1,blank=True,null=True)
     postal_code = models.IntegerField(default=-1,blank=True,null=True)
-    
+    amount = models.IntegerField(default=0,blank=True,null=True)
+
     
     def __str__(self):
         return (self.name)
