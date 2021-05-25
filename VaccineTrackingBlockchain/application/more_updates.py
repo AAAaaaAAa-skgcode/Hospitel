@@ -3,15 +3,15 @@ from bigchaindb_driver.crypto import generate_keypair
 from time import sleep
 from sys import exit
 
-hospital_key = generate_keypair()
-public_key = hospital_key.public_key
-private_key = hospital_key.private_key
+#hospital_key = generate_keypair()
+#public_key = hospital_key.public_key
+#private_key = hospital_key.private_key
 
 bdb_root_url = 'localhost:9984'  # Use YOUR BigchainDB Root URL here
 
 bdb = BigchainDB(bdb_root_url)
 
-def create_vaccination(public_key, private_key, prim_number, amka, name, age, gender, address, country, city, brand, status, doses, symptoms, first_date, hospital):
+def create_vaccination(public_key, private_key, prim_number, amka, name, age, gender, address, country, city, brand, status, doses, symptoms, first_date,second_dose_date, hospital):
     hospital_asset = {
         'data': {
             'vaccine': 'vaccine',
@@ -32,6 +32,7 @@ def create_vaccination(public_key, private_key, prim_number, amka, name, age, ge
         'completed_doses': doses,
         'symptoms': symptoms,
         'first_dose_date': first_date,
+        'second_dose_date': second_dose_date,
         'hospital': hospital
         }
 
@@ -54,9 +55,9 @@ def create_vaccination(public_key, private_key, prim_number, amka, name, age, ge
     # return txid
 
 
-create_vaccination(public_key, private_key, '1', '01109700300', 'JK', '25', 'male', 'grimold place', 'UK', 'London', 'Moderna', 'pending', '1', 'none', '5/6', 'St Mungos')
-create_vaccination(public_key, private_key, '2', '06055400800', 'Sherlock Holmes', '30', 'male', 'baker street', 'UK', 'London', 'Pfeizer', 'pending', '1', 'none', '6/6', 'random')
-create_vaccination(public_key, private_key, '3', '13039000900', 'Lia', '40', 'female', 'unknown', 'Germany', 'Berlin', 'Pfeizer', 'pending', '1', 'fever', '10/6', 'random')
+#create_vaccination(public_key, private_key, '1', '01109700300', 'JK', '25', 'male', 'grimold place', 'UK', 'London', 'Moderna', 'pending', '1', 'none', '5/6', 'St Mungos')
+#create_vaccination(public_key, private_key, '2', '06055400800', 'Sherlock Holmes', '30', 'male', 'baker street', 'UK', 'London', 'Pfizer', 'pending', '1', 'none', '6/6', 'random')
+#create_vaccination(public_key, private_key, '3', '13039000900', 'Lia', '40', 'female', 'unknown', 'Germany', 'Berlin', 'Pfeizer', 'pending', '1', 'fever', '10/6', 'random')
 
 
 # print('*********************************************')
@@ -84,7 +85,14 @@ def update_vaccination(public_key, private_key, amka, **kwargs):
     txid = bdb.assets.get(search = amka)
     txid = txid[0]['id']
 
-    fulfilled = bdb.transactions.retrieve(txid)
+    fulfilled = bdb.transactions.get(asset_id=txid)
+    last = len(fulfilled) - 1
+    print('######## 1 ##################')
+    print(fulfilled)
+
+    # t = bdb.transactions.get(asset_id=id)
+    # print('######## 2 ##################')
+    # print(t)
 
     update_asset = {
         'id': txid
@@ -114,13 +122,13 @@ def update_vaccination(public_key, private_key, amka, **kwargs):
     print(update_metadata)
 
     output_index = 0
-    output = fulfilled['outputs'][output_index]
+    output = fulfilled[last]['outputs'][output_index]
 
     update_input = {
         'fulfillment': output['condition']['details'],
         'fulfills': {
             'output_index': output_index,
-            'transaction_id': fulfilled['id']
+            'transaction_id': fulfilled[last]['id']
         },
         'owners_before': output['public_keys']
     }
@@ -142,16 +150,16 @@ def update_vaccination(public_key, private_key, amka, **kwargs):
 
 
 
-update_vaccination(public_key, private_key, '06055400800',  vaccine_brand = None, status = None, completed_doses = None, symptoms = 'fever', second_date = None, hospital = None)
+#update_vaccination(public_key, private_key, '06055400800',  vaccine_brand = None, status = None, completed_doses = None, symptoms = 'fever', second_date = None, hospital = None)
 
-update_vaccination(public_key, private_key, '13039000900', vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'none', second_date = '26/6', hospital = None)
+#update_vaccination(public_key, private_key, '13039000900', vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'none', second_date = '26/6', hospital = None)
 
 # print('### 1 ###')
 # q1 = bdb.metadata.get(search = 'cancelled')
 # print(q1)
 
 # print('### 2 ###')
-q2 = bdb.assets.get(search = '06055400800')
-print(q2)
+#q2 = bdb.assets.get(search = '06055400800')
+#print(q2)
 
-update_vaccination(public_key, private_key, '06055400800',  vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'tired', second_date = '30/6', hospital = None)
+#update_vaccination(public_key, private_key, '06055400800',  vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'tired', second_date = '30/6', hospital = None)

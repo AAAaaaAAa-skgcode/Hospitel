@@ -12,6 +12,13 @@ import re
 import requests
 import json
 
+#BIGCHAIN DB
+from .more_updates import *
+from bigchaindb_driver import BigchainDB
+from bigchaindb_driver.crypto import generate_keypair
+from time import sleep
+from sys import exit
+
 # Create your views here.
 
 @unauthenticated_user
@@ -46,6 +53,7 @@ def register(request):
                 User.objects.get(username=email)
             except User.DoesNotExist:
                 user = User.objects.create_user(username=email,email=email,password = raw_password)
+                hospital_key = generate_keypair()
                 hospital = Hospital.objects.create(
                         user = user,
                         name = request.POST.get('hospital-name'),
@@ -53,7 +61,9 @@ def register(request):
                         city = request.POST.get('city'),
                         street = request.POST.get('street'),
                         number = request.POST.get('number'),
-                        postal_code = request.POST.get('postal-code')
+                        postal_code = request.POST.get('postal-code'),
+                        public_key = hospital_key.public_key,
+                        private_key = hospital_key.private_key
                 )
                 pfizer_vaccine = Vaccine.objects.get(brand='Pfizer')
                 avail_pfizer = AvailabeVaccines.objects.create(
@@ -142,6 +152,8 @@ def hospital_profile(request):
         current_user.save()
         current_hospital.save()
 
+        #update_vaccination(current_hospital.public_key, current_hospital.private_key, '06055400800',  vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'tired', second_date = '30/6', hospital = None)
+
         context = {'current_hospital':current_hospital, 'current_pfizer':current_pfizer,'current_moderna':current_moderna, 'current_johnson':current_johnson, 'current_astra':current_astra}
         return redirect("/profile")
 
@@ -199,6 +211,26 @@ def add_vaccination(request):
         if vaccination == None:
             context = {'err':"Κάτι πήγε στραβά"}
             return render(request, 'application/authenticated/add_vaccination.html',context)
+        
+        create_vaccination(
+            current_hospital.public_key,
+            current_hospital.private_key,
+            current_hospital.pk,
+            ssid,
+            first_name,
+            age,
+            gender,
+            address,
+            country,
+            city,
+            vaccine_brand.brand,
+            status,
+            completed_doses,
+            symptoms,
+            dose_a,
+            dose_b,
+            current_hospital.name
+        )
         return redirect("/addVaccination")
 
     return render(request, 'application/authenticated/add_vaccination.html')

@@ -157,14 +157,14 @@ def search_all():
 
 
 
-# user = search_amka('01109700300')
-# print(user)
+#user = search_amka('3123123')
+#print(user)
 
-# status = search_status('pending')
-# print(status)
+#status = search_status('pending')
+#print(status)
 
-# hosp = search_hospital('random')
-# print(hosp)
+#hosp = search_hospital('random')
+#print(hosp)
 
 # c = search_country('UK')
 # print(c)
@@ -172,11 +172,11 @@ def search_all():
 # g = search_gender('male')
 # print(g)
 
-# b = search_brand('Pfeizer')
-# print(b)
+#b = search_brand('Moderna')
+#print(b)
 
 # ct = search_city('London')
 # print(ct)
 
-# all = search_all()
-# print(all)
+#all = search_all()
+#print(all)
