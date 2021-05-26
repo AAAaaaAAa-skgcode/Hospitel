@@ -10,10 +10,15 @@ urlpatterns = [
         
     path('resultdata',views.resultdata,name="resultdata"),
     path('stats',views.stats,name="stats"),
-    path('countriesstats',views.countriesstats,name="countriesstats"),
-    path('statsPerCountrie',views.statsPerCountrie,name="statsPerCountrie"),
+
+    path('hospitalstats',views.hospitalstats,name="hospitalstats"),
+    path('statsPerHospital',views.statsPerHospital,name="statsPerHospital"),
+    path('countrystats',views.countrystats,name="countrystats"),
+    path('statsPerCountry',views.statsPerCountry,name="statsPerCountry"),
     path('citystats',views.citystats,name="citystats"),
-    path('statsPerCity',views.statsPerCity,name="statsPerCity")
+    path('statsPerCity',views.statsPerCity,name="statsPerCity"),
+    path('agestats',views.agestats,name="agestats"),
+    path('statsPerAge',views.statsPerAge,name="statsPerAge")
 
     
 ]

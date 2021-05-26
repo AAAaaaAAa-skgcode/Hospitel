@@ -245,34 +245,28 @@ def stats(request):
     print(stats_json_generator('hospital'))
     print(stats_json_generator('country'))
     print(stats_json_generator('symptoms'))
+    print(stats_json_generator('age'))
+
     return render(request,'application/authenticated/stats.html')
 
-def resultdata(request):
-    data = {}
-   
-    for hosp in Hospital.objects.filter():
-        data[hosp.name] = hosp.amount
-        print('data',data)
-    
-
-    return JsonResponse(data, safe=False)
-
+def resultdata(request):  
+    return JsonResponse(stats_json_generator('hosprital'))
 
 
 @login_required(login_url="login")
-def statsPerCountrie(request):
-    return render(request,'application/authenticated/countriesStats.html')
+def statsPerHospital(request):
+    return render(request,'application/authenticated/hospitalStats.html')
 
-def countriesstats(request):
+def hospitalstats(request):
+    return JsonResponse(stats_json_generator('hospital'))  
 
-    data = {}
-   
-    for hosp in Hospital.objects.filter():
-        data[hosp.country] = hosp.amount
-        print('data',data)
-    
 
-    return JsonResponse(data, safe=False)
+@login_required(login_url="login")
+def statsPerCountry(request):
+    return render(request,'application/authenticated/countryStats.html')
+
+def countrystats(request):
+    return JsonResponse(stats_json_generator('country'))
     
 
 @login_required(login_url="login")
@@ -280,15 +274,14 @@ def statsPerCity(request):
     return render(request,'application/authenticated/cityStats.html')
 
 def citystats(request):
+    return JsonResponse(stats_json_generator('city'))
 
-    data = {}
-   
-    for hosp in Hospital.objects.filter():
-        data[hosp.city] = hosp.amount
-        print('data',data)
-    
+@login_required(login_url="login")
+def statsPerAge(request):
+    return render(request,'application/authenticated/ageStats.html')
 
-    return JsonResponse(data, safe=False)
+def agestats(request):
+    return JsonResponse(stats_json_generator('age'))    
     
 def stats_json_generator(field):
     all = search_all()
@@ -305,7 +298,7 @@ def stats_json_generator(field):
     #gia kathe diaforetiki eggrafi metrao poses fores vrethike sto json
     for listitem in temp_list_of_found_fields:
         # -1 giati to json kanei 1 parapano iteration se keno record
-        count_json_records = -1
+        count_json_records = 0
         for json_record in json_all:
             try:
                 json_record[listitem]
