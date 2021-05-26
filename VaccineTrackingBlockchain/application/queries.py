@@ -135,6 +135,7 @@ def search_gender(gender):
 
 
 
+
 def search_brand(vaccine_brand):
     br = bdb.metadata.get(search = vaccine_brand)
     userlist = get_metadata(br)
@@ -178,5 +179,8 @@ def search_all():
 # ct = search_city('London')
 # print(ct)
 
-#all = search_all()
-#print(all)
+all = search_all()
+print(all)
+
+s_hospital = search_hospital('HOSSP')
+print(s_hospital)

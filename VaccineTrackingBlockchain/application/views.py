@@ -14,6 +14,7 @@ import json
 
 #BIGCHAIN DB
 from .more_updates import *
+from .queries import *
 from bigchaindb_driver import BigchainDB
 from bigchaindb_driver.crypto import generate_keypair
 from time import sleep
@@ -160,6 +161,7 @@ def hospital_profile(request):
     context = {'current_hospital':current_hospital, 'current_pfizer':current_pfizer,'current_moderna':current_moderna, 'current_johnson':current_johnson, 'current_astra':current_astra}
     return render(request, 'application/authenticated/profile.html',context)
 
+@login_required(login_url="login")
 def add_vaccination(request):
     current_user = request.user
     current_hospital = Hospital.objects.get(user=current_user)
@@ -239,6 +241,10 @@ def add_vaccination(request):
 
 @login_required(login_url="login")
 def stats(request):
+    print(stats_json_generator('city'))
+    print(stats_json_generator('hospital'))
+    print(stats_json_generator('country'))
+    print(stats_json_generator('symptoms'))
     return render(request,'application/authenticated/stats.html')
 
 def resultdata(request):
@@ -284,3 +290,29 @@ def citystats(request):
 
     return JsonResponse(data, safe=False)
     
+def stats_json_generator(field):
+    all = search_all()
+    returned_json = {}
+    temp_list_of_found_fields = []
+
+    #metatropi toy all se json
+    json_all = json.loads(all)
+
+    #dinamika vrisko poses diaforetikes eggrafes iparoyn gia to pedio field
+    for item in json_all:
+        temp_list_of_found_fields.append(item[field])
+    
+    #gia kathe diaforetiki eggrafi metrao poses fores vrethike sto json
+    for listitem in temp_list_of_found_fields:
+        # -1 giati to json kanei 1 parapano iteration se keno record
+        count_json_records = -1
+        for json_record in json_all:
+            try:
+                json_record[listitem]
+            except KeyError:
+                pass
+            count_json_records +=1
+
+        returned_json[listitem] = count_json_records
+
+    return returned_json
