@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Statistics</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+      }
+
+      #myChart {
+        height: 100%;
+        width: 100%;
+        min-height: 150px;
+      }
+
+      .zc-ref {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+      var state = {
+        items: [],
+        values: [],
+      };
+           
+      var dataURL = "/agestats";
+      $.ajax({
+        method: "GET",
+        url: dataURL,
+        success: function (response) {
+          console.log("Response", response);
+
+          for (var i in response) {
+            var key = i;
+            var value = response[i];
+            console.log(key);
+            console.log(value);
+
+            state.items.push(key);
+            state.values.push(value);
+          }
+          console.log("STATE:", state);
+
+          for (var i in Object.keys(state)) {
+            console.log("[", i, "]", state.items[i]);
+            console.log("[", i, "]", state.values[i]);
+          }
+          
+            
+          let myChart = document.getElementById("myChart").getContext("2d");
+
+          // Global Options
+          Chart.defaults.global.defaultFontFamily = "Lato";
+          Chart.defaults.global.defaultFontSize = 18;
+          Chart.defaults.global.defaultFontColor = "#777";
+          let massPopChart = new Chart(myChart, {
+            type: "pie", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+            data: {
+              labels: state.items,
+              datasets: [
+                {
+                  label: "Ammount Of Vaccines",
+                  data: state.values,
+                  backgroundColor:'green',
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.6)",
+                    "rgba(54, 162, 235, 0.6)",
+                    "rgba(255, 206, 86, 0.6)",
+                    "rgba(75, 192, 192, 0.6)",
+                    "rgba(153, 102, 255, 0.6)",
+                    "rgba(255, 159, 64, 0.6)",
+                    "rgba(255, 99, 132, 0.6)",
+                  ],
+                  borderWidth: 1,
+                  borderColor: "#777",
+                  hoverBorderWidth: 3,
+                  hoverBorderColor: "#000",
+                },
+              ],
+            },
+            options: {
+              title: {
+                display: true,
+                text: "Amount of Vaccines per Age",
+                fontSize: 25,
+              },
+              legend: {
+                display: false,
+                position: "right",
+                labels: {
+                  fontColor: "#000",
+                },
+              },
+              layout: {
+                padding: {
+                  left: 50,
+                  right: 0,
+                  bottom: 0,
+                  top: 0,
+                },
+              },
+              tooltips: {
+                enabled: true,
+              },
+            },
+          });
+        },
+      });
+    </script>
+  </body>
+</html>
