@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title></title>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=okANIrwJC2zGokE5uF0OpcTE_jlYUCeDpSB-xdD8eP4kyT145WVxaMGHXoULb16XnNFBBxNpxP10Li2RJMLBLIomFzLKCLVR3pdX9e1EQxLB_HSaiywORXWE8X18pFlkhvAOroKW_5_-31gRTstS1iVtg5EpR_BZOYPEcRAL0sQ" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobWVudHMvODMxNDM3NjUxNjAwNzM2MzA2Lzg0NzgyNjc0NzE3MjcxNjU5MC9hbGxfdmFjY2luYXRpb25zLmh0bWw"/><script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/gridjs-jquery/dist/gridjs.development.js"></script>
+    <script src="https://unpkg.com/gridjs/dist/gridjs.development.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
+    <link rel="icon" href="{% static 'img/logo.png' %}" />
+    <link rel="stylesheet" href="{% static 'index.css' %}"/>
+    <style>
+      .completed {
+        background-color: green;
+      }
+      .canceled {
+        background-color: #b12626;
+      }
+      .pending {
+        background-color: orange;
+      }
+      .completed,
+      .canceled,
+      .pending {
+        font-size: 15px;
+        color: white;
+        padding: 2px;
+        display: block;
+        border-radius: 3px;
+      }
+      tr.gridjs-tr:nth-child(even) td {
+        background: #f2f2f2;
+      }
+      .gridjs-search {
+        float: right;
+      }
+
+      input.gridjs-input:focus {
+        border-color: #f37121;
+        box-shadow: 0 0 0 1px #f37121;
+      }
+      .my-custom-td-class {
+        color: violet;
+        
+      }
+      .action {
+        padding: 2px;
+        border-radius: 4px;
+        background-color: DodgerBlue;
+        display: block;
+        color: white;
+        text-decoration: none;
+      }
+      .action:hover {
+        background-color: RoyalBlue;
+      }
+      .edit {
+        text-decoration: none;
+        color: gray;
+      }
+
+      .edit:hover {
+        text-decoration: none;
+        color: #f37121;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <header class="profile-header">
+          <div class="header_avatar">
+          <i class="fas fa-sign-out-alt"></i>
+          <a href='{% url "logout_view" %}'> Logout</a>
+          </div>
+      </header>
+      <aside class="profile-aside">
+          <img src="{% static 'img/logo.png' %}" alt="logo" class="profile-logo" />
+          <nav class="profile-aside_nav">
+              <ul class="profile-aside_list">
+                  <li class="profile-aside_list-item">
+                  <a href='{% url "add_vaccination" %}' class="profile-aside_list-link"><i class="fas fa-syringe"></i>Add Vaccination</a>
+                  </li>
+                  <li class="profile-aside_list-item">
+                  <a href='{% url "all_vaccinations" %}'class="profile-aside_list-link"><i class="fas fa-folder-open"></i>All Vaccinations</a>
+                  </li>
+                  <li class="profile-aside_list-item">
+                  <a  class="profile-aside_list-link"><i class="far fa-chart-bar"></i>Statistics</a>
+                  </li>
+                  <li class="profile-aside_list-item">
+                  <a href='{% url "hospital_profile" %}' class="profile-aside_list-link"><i class="fas fa-user"></i>Profile</a>
+                  </li>
+              </ul>
+          <nav>
+      </aside>
+      
+      <main class="main">
+          <div class="container-main"></div>
+</main>
+    <script type="module">
+      const grid = new gridjs.Grid({
+        columns: ["AMKA","Name", "Age", "Gender", "Hospital", "Country", "Status", "1st Dose", "2nd Dose", "Symptoms", "Actions"],
+        server: {
+          url:"{% static 'data.json' %}",
+          then: (data) =>
+            data.map((vaccine) => [
+              vaccine.amka,
+              vaccine.name,
+              vaccine.age,
+              vaccine.gender,
+              vaccine.hospital,
+              vaccine.country,
+              gridjs.html("<span class='" + vaccine.status.toLowerCase() + "'>" + vaccine.status + "</span>"),
+              vaccine.first_dose_date,
+              vaccine.second_dose_date,
+              vaccine.symptoms,
+              //"HOSSP" == vaccine.hospital ? gridjs.html("<a class='action' href=''>" + "<i class='far fa-edit'>" + " " + "Edit" + "</a>") : "",
+              "HOSSP" == vaccine.hospital ? gridjs.html("<a class='edit' href='{% url "add_vaccination" %}'>" + "<i class='far fa-edit'>" + "</a>") : "",
+            ]),
+          //data: (opts) => {
+          //return new Promise((resolve, reject) => {
+          // let's implement our own HTTP client
+          //const xhttp = new XMLHttpRequest();
+          // xhttp.onreadystatechange = function () {
+          // if (this.readyState === 4) {
+          //if (this.status === 200) {
+          //const resp = JSON.parse(this.response);
+
+          // make sure the output conforms to StorageResponse format:
+          // https://github.com/grid-js/gridjs/blob/master/src/storage/storage.ts#L21-L24
+          //resolve({
+          //data: resp.data.map((card) => [card.name, card.lang, card.released_at, card.artist]),
+          //total: resp.total_cards,
+          // });
+          //} else {
+          //reject();
+          //}
+          //}
+          //};
+          //xhttp.open("GET", opts.url, true);
+          // xhttp.send();
+          // });
+          //},
+        },
+        pagination: {
+          limit: 10,
+        },
+        search: true,
+        sort: true,
+        fixedHeader: true,
+        resizable: true,
+        language: {
+          search: {
+            placeholder: "🔍 Search...",
+          },
+        },
+        className: {
+          td: "my-custom-td-class",
+          table: "custom-table-classname",
+        },
+        style: {
+          table: {'white-space': 'nowrap'},
+          th: {
+            "background-color": "#f37121",
+            "color": "white",
+            "border-bottom": "3px solid #f37121",
+            "text-align": "center",
+            "font-size": "17px",
+          },
+          td: {
+            "text-align": "center",
+             "min-width": "fit-content"
+          },
+        },
+      }).render(document.querySelector('.container-main'));
+
+      console.log(grid);
+    </script>
+      
+  </body>
+</html>

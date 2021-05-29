@@ -7,6 +7,8 @@ urlpatterns = [
     path('profile',views.hospital_profile,name="hospital_profile"),
     path('logout',views.logout_view,name="logout_view"),
     path('addVaccination',views.add_vaccination,name="add_vaccination"),
+    path('updateVaccination/<str:amka>', views.update_vaccination, name='updateVaccination'),
+    path('allVaccinations',views.all_vaccinations,name="all_vaccinations"),
         
     path('resultdata',views.resultdata,name="resultdata"),
     path('stats',views.stats,name="stats"),

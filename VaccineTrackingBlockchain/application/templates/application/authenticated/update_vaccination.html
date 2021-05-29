@@ -68,19 +68,22 @@
                                         placeholder="A.M.K.A"
                                         name="amka"
                                         id="amka"
+                                        value = "{{current_amka}}"
                                         required
+                                        readonly
                                         autocomplete="off"
                                         />
                                 </div>
-
                                 <div class="input-container-column">
                                     <i class="far fa-user icon"></i>
                                     <input
                                     class="input-field"
                                     type="text"
-                                    placeholder="Full Name"
+                                    placeholder="FUll Name"
                                     name="fname"
                                     id="fname"
+                                    value = "{{current_name}}"
+                                    readonly
                                     required
                                     autocomplete="off"
                                     />
@@ -89,11 +92,17 @@
                             <div class="input-container">
                                 <div class="input-container-column">
                                     <i class="fas fa-transgender icon"></i>
-                                    <select id="mySelect"  name="mySelect" onchange="gender();">
-                                        <option value="">Select Gender</option>
-                                        <option value="female">Female</option>
-                                        <option value="male">Male</option>
-                                    </select>
+                                    <input
+                                    class="input-field"
+                                    type="text"
+                                    placeholder="FUll Name"
+                                    name="mySelect"
+                                    id="mySelect"
+                                    value = "{{current_gender}}"
+                                    readonly
+                                    required
+                                    autocomplete="off"
+                                    />
                                 </div>
                                 <div class="input-container-column">
                                     <i class="fas fa-globe-europe icon"></i>
@@ -103,6 +112,8 @@
                                     placeholder="Age"
                                     name="age"
                                     id="age"
+                                    value = "{{current_age}}"
+                                    readonly
                                     required
                                     autocomplete="off"
                                     />
@@ -120,6 +131,8 @@
                                         placeholder="Street,Number"
                                         name="street"
                                         id="street"
+                                        value = "{{current_address}}"
+                                        readonly
                                         autocomplete="off"
                                     />
                                 </div>
@@ -131,6 +144,8 @@
                                         placeholder="City"
                                         name="city"
                                         id="city"
+                                        value = "{{current_city}}"
+                                        readonly
                                         required
                                         autocomplete="off"
                                     />
@@ -145,6 +160,8 @@
                                         placeholder="Country"
                                         name="country"
                                         id="country"
+                                        value = "{{current_country}}"
+                                        readonly
                                         required
                                         autocomplete="off"
                                     />
@@ -157,15 +174,18 @@
                             </div>
                             <div class="input-container">
                                 <div class="input-container-column">
-                                    <label for="vbrand">Vaccine Brand</label>
-                                    <i class="fas fa-viruses icon"></i>
-                                    <select id="vbrand" name="vbrand">
-                                        <option value="">Select</option>
-                                        <option value="Pfizer">Pfizer-BioNTech</option>
-                                        <option value="AstraZeneca">AstraZeneca</option>
-                                        <option value="Johnson & Johnson">Johnson & Johnson's Janssen</option>
-                                        <option value="Moderna">Moderna</option>
-                                    </select>
+                                    <i class="far fa-id-badge icon"></i></i>
+                                    <input
+                                    class="input-field"
+                                    type="text"
+                                    placeholder="Vaccine Brand"
+                                    name="vbrand"
+                                    id="vbrand"
+                                    value="{{current_vaccine_brand}}"
+                                    readonly
+                                    required
+                                    autocomplete="off"
+                                    />
                                 </div>
                             </div>
                             <div class="input-container">
@@ -177,47 +197,83 @@
                                         type="date"
                                         name="dosea"
                                         id="dosea"
+                                        value={{current_first_dose}}
+                                        required
                                         required
                                     />
                                 </div>
                                 <div class="input-container-column">
-                                    <label for="doseb">Dose B</label>
+                                    <label for="dosea">Dose B</label>
                                     <i class="far fa-calendar-alt icon"></i>
                                     <input
                                         class="input-field"
                                         type="date"
                                         name="doseb"
                                         id="doseb"
+                                        value={{current_second_dose}}
+                                        required
                                         required
                                     />
                                 </div>
-                            </div>
-                            <div class="input-container">
                                 <div class="input-container-column">
                                     <label for="compldoses">Completed Doses</label>
                                     <i class="fas fa-mouse-pointer icon"></i>
                                     <select id="compldoses" name="compldoses">
-                                        <option value="">Select</option>
-                                        <option value=0>0</option>
-                                        <option value=1>1</option>
-                                        <option value=2>2</option>
+                                        {% if current_completed_doses == 0 %}
+                                            <option value="">Select</option>
+                                            <option value=0 selected>0</option>
+                                            <option value=1>1</option>
+                                            <option value=2>2</option>
+                                        {% elif current_completed_doses == 1%}
+                                            <option value="">Select</option>
+                                            <option value=0>0</option>
+                                            <option value=1 selected>1</option>
+                                            <option value=2>2</option>
+                                        {% elif current_completed_doses == 2%}
+                                            <option value="">Select</option>
+                                            <option value=0>0</option>
+                                            <option value=1 >1</option>
+                                            <option value=2 selected>2</option>
+                                        {% else %}
+                                            <option value="" selected>Select</option>
+                                            <option value=0>0</option>
+                                            <option value=1 >1</option>
+                                            <option value=2 selected>2</option>
+                                        {% endif %}
                                     </select>
                                 </div>
+                            </div>
                                 <div class="input-container-column">
                                     <label for="status">Status of Vaccinations</label>
                                     <i class="fas fa-mouse-pointer icon"></i>
                                     <select id="status" name="status">
-                                        <option value="">Select</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="canceled">Canceled</option>
+                                        {% if current_status == "" %}
+                                            <option value="" selected>Select</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="canceled">Canceled</option>
+                                        {% elif current_status == "pending"%}
+                                            <option value="">Select</option>
+                                            <option value="pending" selected>Pending</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="canceled">Canceled</option>
+                                        {% elif current_status == "completed"%}
+                                            <option value="">Select</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="completed" selected>Completed</option>
+                                            <option value="canceled">Canceled</option>
+                                        {% elif current_status == "canceled" %}
+                                            <option value="">Select</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="canceled" selected>Canceled</option>
+                                        {% endif %}
                                     </select>
                                 </div>
-                            </div>
                             <div class="input-container">
                                 <div class="input-container-column">
                                     <label for="symptoms">Symptoms</label>
-                                    <textarea id="symptoms" name="symptoms" rows="4" cols="50">...</textarea>
+                                    <textarea id="symptoms" name="symptoms" rows="4" cols="50">{{current_symptoms}}</textarea>
                                 </div>
                             </div>    
                         </div>

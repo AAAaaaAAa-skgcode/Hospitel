@@ -10,7 +10,6 @@ class Hospital(models.Model):
     city = models.CharField(max_length=200,default="",blank=True,null=True)
     street = models.CharField(max_length=200,default="",blank=True,null=True)
     number = models.IntegerField(default=-1,blank=True,null=True)
-    postal_code = models.IntegerField(default=-1,blank=True,null=True)
     amount = models.IntegerField(default=0,blank=True,null=True)
     public_key = models.CharField(max_length=200,default="",blank=True,null=True)
     private_key = models.CharField(max_length=200,default="",blank=True,null=True)
@@ -32,8 +31,8 @@ class Vaccine(models.Model):
 class AvailabeVaccines(models.Model):
     hospital = models.ForeignKey(Hospital,on_delete=models.CASCADE)
     vaccine = models.ForeignKey(Vaccine,on_delete=models.CASCADE)
-    free_amount = models.IntegerField(default=-1,blank=True,null=True)
-    reserved = models.IntegerField(default=-1,blank=True,null=True)
+    free_amount = models.IntegerField(default=0,blank=True,null=True)
+    reserved = models.IntegerField(default=0,blank=True,null=True)
 
 #vaccination local
 status_vaccination = [

@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse
+from django.http.response import HttpResponseRedirect
 from .models import *
 from .decorators import *
 from .forms import *
@@ -153,8 +154,6 @@ def hospital_profile(request):
         current_user.save()
         current_hospital.save()
 
-        #update_vaccination(current_hospital.public_key, current_hospital.private_key, '06055400800',  vaccine_brand = None, status = 'completed', completed_doses = '2', symptoms = 'tired', second_date = '30/6', hospital = None)
-
         context = {'current_hospital':current_hospital, 'current_pfizer':current_pfizer,'current_moderna':current_moderna, 'current_johnson':current_johnson, 'current_astra':current_astra}
         return redirect("/profile")
 
@@ -175,7 +174,6 @@ def add_vaccination(request):
         address = request.POST.get('street')
         city = request.POST.get('city')
         country = request.POST.get('country')
-        postal_code = request.POST.get('postal-code')
         vbrand = request.POST.get('vbrand')
         dose_a = request.POST.get('dosea')
         dose_b = request.POST.get('doseb')
@@ -183,14 +181,17 @@ def add_vaccination(request):
         status = request.POST.get('status')
         symptoms = request.POST.get('symptoms')
 
-        try:
-            vaccine_brand = Vaccine.objects.get(brand=vbrand)
-            current_hospital.amount = current_hospital.amount + 1
-            print(current_hospital.amount)
-            current_hospital.save()
-        except Vaccine.DoesNotExist:
-            context = {'err':"Κάτι πήγε στραβά 🍌"}
-            return render(request, 'application/authenticated/add_vaccination.html',context)
+
+        vaccine = Vaccine.objects.get(brand=vbrand)
+        avl_doses_of_vacc = AvailabeVaccines.objects.get(vaccine=vaccine)
+        if avl_doses_of_vacc.free_amount >= vaccine.doses:
+            avl_doses_of_vacc.free_amount -= vaccine.doses
+            avl_doses_of_vacc.reserved += vaccine.doses
+        else:
+             message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
+             context = {'err':message}
+             return render(request, 'application/authenticated/add_vaccination.html',context)
+        
 
         vaccination = Vaccination.objects.create(
             ssid = ssid,
@@ -201,9 +202,8 @@ def add_vaccination(request):
             address = address,
             city = city,
             country = country,
-            postal_code = postal_code,
             status = status,
-            vaccine_brand = vaccine_brand,
+            vaccine_brand = vaccine,
             completed_doses = completed_doses,
             symptoms = symptoms,
             first_dose_date = dose_a,
@@ -225,7 +225,7 @@ def add_vaccination(request):
             address,
             country,
             city,
-            vaccine_brand.brand,
+            vaccine.brand,
             status,
             completed_doses,
             symptoms,
@@ -237,6 +237,115 @@ def add_vaccination(request):
 
     return render(request, 'application/authenticated/add_vaccination.html')
 
+@login_required(login_url="login")
+def update_vaccination(request,amka):
+    current_user = request.user
+    current_hospital = Hospital.objects.get(user=current_user)
+    current_vaccintaion_bigchain_record = search_amka(amka)
+    
+    #vaccination with this amka not exist
+    if len(current_vaccintaion_bigchain_record) == 2:
+        return redirect('hospital_profile')
+    
+    vaccination_json = json.loads(current_vaccintaion_bigchain_record)
+
+    hospital_json = vaccination_json[0]['hospital']
+    hospital_json = Hospital.objects.get(name=hospital_json)
+    #to nosokomeio poy ekane ton emvoliasmo tautizetai me to noskomeio pou zitaei na kanei update
+    if hospital_json != current_hospital:
+        return redirect('hospital_profile')
+
+    if request.method == "POST":
+        ssid = request.POST.get('amka')
+        first_name = request.POST.get('fname')
+        last_name = request.POST.get('lastname')
+        gender = request.POST.get('mySelect')
+        age = request.POST.get('age')
+        address = request.POST.get('street')
+        city = request.POST.get('city')
+        country = request.POST.get('country')
+        vbrand = request.POST.get('vbrand')
+        dose_a = request.POST.get('dosea')
+        dose_b = request.POST.get('doseb')
+        completed_doses = request.POST.get('compldoses')
+        status = request.POST.get('status')
+        symptoms = request.POST.get('symptoms')
+
+        print("SYMPTOMS: " + symptoms)
+
+        print("=============================\n")
+        print(ssid,first_name,symptoms)
+        print("=============================\n")
+
+        #update local
+        current_vaccination = Vaccination.objects.get(ssid=amka)
+        current_vaccination.ssid = ssid
+        current_vaccination.first_name = first_name
+        current_vaccination.last_name = last_name
+        current_vaccination.age = age
+        current_vaccination.gender = gender
+        current_vaccination.address = address
+        current_vaccination.city = city
+        current_vaccination.country = country
+        current_vaccination.status = status
+        current_vaccination.vaccine_brand = Vaccine.objects.get(brand=vbrand)
+        current_vaccination.completed_doses = completed_doses
+        current_vaccination.symptoms = symptoms
+        current_vaccination.first_dose_date = dose_a
+        current_vaccination.second_dose_date = dose_b
+        current_vaccination.save()
+
+        #update BigChain
+        state = update_vaccination_bigchain(
+            current_hospital.public_key,
+            current_hospital.private_key,
+            ssid,
+            vaccine_brand = vbrand,
+            status = status,
+            completed_doses = completed_doses,
+            symptoms = symptoms,
+            first_date = dose_a,
+            second_date = dose_b
+        )
+        print(state)
+
+        current_vaccintaion_bigchain_record = search_amka(amka)
+        vaccination_json = json.loads(current_vaccintaion_bigchain_record)
+        context = {
+            'current_amka':vaccination_json[0]['amka'],
+            'current_name':vaccination_json[0]['name'],
+            'current_age':vaccination_json[0]['age'],
+            'current_gender':vaccination_json[0]['gender'],
+            'current_country':vaccination_json[0]['country'],
+            'current_city':vaccination_json[0]['city'],
+            'current_address':vaccination_json[0]['address'],
+            'current_vaccine_brand':vaccination_json[0]['vaccine_brand'],
+            'current_first_dose':vaccination_json[0]['first_dose_date'],
+            'current_second_dose':vaccination_json[0]['second_dose_date'],
+            'current_symptoms':vaccination_json[0]['symptoms'],
+            'current_completed_doses':int(vaccination_json[0]['completed_doses']),
+            'current_status':vaccination_json[0]['status'],
+        }
+        return HttpResponseRedirect('/updateVaccination/'+ssid,context)
+
+    
+    context = {
+        'current_amka':vaccination_json[0]['amka'],
+        'current_name':vaccination_json[0]['name'],
+        'current_age':vaccination_json[0]['age'],
+        'current_gender':vaccination_json[0]['gender'],
+        'current_country':vaccination_json[0]['country'],
+        'current_city':vaccination_json[0]['city'],
+        'current_address':vaccination_json[0]['address'],
+        'current_vaccine_brand':vaccination_json[0]['vaccine_brand'],
+        'current_first_dose':vaccination_json[0]['first_dose_date'],
+        'current_second_dose':vaccination_json[0]['second_dose_date'],
+        'current_symptoms':vaccination_json[0]['symptoms'],
+        'current_completed_doses':int(vaccination_json[0]['completed_doses']),
+        'current_status':vaccination_json[0]['status'],
+        
+    }
+    return render(request, 'application/authenticated/update_vaccination.html',context)
 
 
 @login_required(login_url="login")
@@ -309,3 +418,13 @@ def stats_json_generator(field):
         returned_json[listitem] = count_json_records
 
     return returned_json
+
+
+
+def all_vaccinations(request):
+    all_vaccination_records = search_all()
+    all_vaccination_records_json = json.loads(all_vaccination_records)
+    context = {
+        "all_vaccination_records_json":all_vaccination_records_json
+    }
+    return render(request,'application/authenticated/all_vaccinations.html',context)

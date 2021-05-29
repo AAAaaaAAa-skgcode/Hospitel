@@ -179,8 +179,8 @@ def search_all():
 # ct = search_city('London')
 # print(ct)
 
-all = search_all()
-print(all)
+#all = search_all()
+#print(all)
 
-s_hospital = search_hospital('HOSSP')
-print(s_hospital)
+#s_hospital = search_hospital('HOSSP')
+#print(s_hospital)

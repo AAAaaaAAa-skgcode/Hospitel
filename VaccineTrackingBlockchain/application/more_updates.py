@@ -52,7 +52,7 @@ def create_vaccination(public_key, private_key, prim_number, amka, name, age, ge
 
     txid = fulfilled_creation_tx['id']
     print("THE TXID IS: ", txid)
-    # return txid
+    return txid
 
 
 #create_vaccination(public_key, private_key, '1', '01109700300', 'JK', '25', 'male', 'grimold place', 'UK', 'London', 'Moderna', 'pending', '1', 'none', '5/6', 'St Mungos')
@@ -80,15 +80,13 @@ def create_vaccination(public_key, private_key, prim_number, amka, name, age, ge
 # ######################################################################################################
 
 
-def update_vaccination(public_key, private_key, amka, **kwargs):
-
+def update_vaccination_bigchain(public_key, private_key, amka, **kwargs):
+    print('IN UPDATE VACCINATION BIGCHAIN\n')
     txid = bdb.assets.get(search = amka)
     txid = txid[0]['id']
 
     fulfilled = bdb.transactions.get(asset_id=txid)
     last = len(fulfilled) - 1
-    print('######## 1 ##################')
-    print(fulfilled)
 
     # t = bdb.transactions.get(asset_id=id)
     # print('######## 2 ##################')
@@ -112,14 +110,15 @@ def update_vaccination(public_key, private_key, amka, **kwargs):
         if (kwargs.get('symptoms') != None):
             update_metadata['symptoms'] = kwargs['symptoms']
 
+        if (kwargs.get('first_date') != None):
+            update_metadata['first_date'] = kwargs['first_date']
+
         if (kwargs.get('second_date') != None):
             update_metadata['second_date'] = kwargs['second_date']
 
         if (kwargs.get('hospital') != None):
              update_metadata['hospital'] = kwargs['hospital']
 
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    print(update_metadata)
 
     output_index = 0
     output = fulfilled[last]['outputs'][output_index]
@@ -147,6 +146,8 @@ def update_vaccination(public_key, private_key, amka, **kwargs):
     )
 
     sent_update_tx = bdb.transactions.send_commit(fulfilled_update_tx)
+
+    return
 
 
 
