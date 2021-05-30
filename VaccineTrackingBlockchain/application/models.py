@@ -34,6 +34,9 @@ class AvailabeVaccines(models.Model):
     free_amount = models.IntegerField(default=0,blank=True,null=True)
     reserved = models.IntegerField(default=0,blank=True,null=True)
 
+    def __str__(self):
+        return (self.hospital.name + "-"+ self.vaccine.brand)
+
 #vaccination local
 status_vaccination = [
     ("pending", "pending"),

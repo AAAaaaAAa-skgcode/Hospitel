@@ -29,6 +29,8 @@ def get_both(id):
                     if (x['metadata']['symptoms'] not in concat):
                         concat = concat + ', ' + x['metadata']['symptoms']
                         usersc['symptoms'] = concat
+                if (x.get('metadata', {}).get('first_date') != None):
+                    usersc['first_dose_date'] = x['metadata']['first_date']
                 if (x.get('metadata', {}).get('second_date') != None):
                     usersc['second_dose_date'] = x['metadata']['second_date']
                 if (x.get('metadata', {}).get('hospital') != None):
@@ -135,7 +137,6 @@ def search_gender(gender):
 
 
 
-
 def search_brand(vaccine_brand):
     br = bdb.metadata.get(search = vaccine_brand)
     userlist = get_metadata(br)
@@ -158,29 +159,26 @@ def search_all():
 
 
 
-#user = search_amka('3123123')
-#print(user)
+# user = search_amka('01109700300')
+# print(user)
 
-#status = search_status('pending')
-#print(status)
+# status = search_status('pending')
+# print(status)
 
-#hosp = search_hospital('random')
-#print(hosp)
+# hosp = search_hospital('random')
+# print(hosp)
 
 # c = search_country('UK')
 # print(c)
 
-# g = search_gender('male')
+# g = search_gender('female')
 # print(g)
 
-#b = search_brand('Moderna')
-#print(b)
+# b = search_brand('Pfeizer')
+# print(b)
 
 # ct = search_city('London')
 # print(ct)
 
-#all = search_all()
-#print(all)
-
-#s_hospital = search_hospital('HOSSP')
-#print(s_hospital)
+# all = search_all()
+# print(all)

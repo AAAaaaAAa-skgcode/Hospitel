@@ -63,7 +63,6 @@ def register(request):
                         city = request.POST.get('city'),
                         street = request.POST.get('street'),
                         number = request.POST.get('number'),
-                        postal_code = request.POST.get('postal-code'),
                         public_key = hospital_key.public_key,
                         private_key = hospital_key.private_key
                 )
@@ -125,7 +124,6 @@ def hospital_profile(request):
         city = request.POST.get('city')
         street = request.POST.get('street')
         number = request.POST.get('number')
-        postal_code = request.POST.get('postal-code')
         email = request.POST.get('email')
         
         pfizer_avail_doses = request.POST.get('pfizer-doses')
@@ -139,7 +137,6 @@ def hospital_profile(request):
         current_hospital.city = city
         current_hospital.street = street
         current_hospital.number = number
-        current_hospital.postal_code = postal_code
         
         current_pfizer.free_amount = pfizer_avail_doses
         current_moderna.free_amount = moderna_avail_doses
@@ -183,10 +180,11 @@ def add_vaccination(request):
 
 
         vaccine = Vaccine.objects.get(brand=vbrand)
-        avl_doses_of_vacc = AvailabeVaccines.objects.get(vaccine=vaccine)
+        avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
         if avl_doses_of_vacc.free_amount >= vaccine.doses:
             avl_doses_of_vacc.free_amount -= vaccine.doses
             avl_doses_of_vacc.reserved += vaccine.doses
+            avl_doses_of_vacc.save()
         else:
              message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
              context = {'err':message}
@@ -419,12 +417,19 @@ def stats_json_generator(field):
 
     return returned_json
 
+@login_required(login_url="login")
+def all_vaccinations_data(request):
+    all_vaccination_records = search_all()
+    all_vaccination_records_json = json.loads(all_vaccination_records)
+    return JsonResponse(all_vaccination_records_json,safe=False)
 
-
+@login_required(login_url="login")
 def all_vaccinations(request):
     all_vaccination_records = search_all()
     all_vaccination_records_json = json.loads(all_vaccination_records)
+    current_user = request.user
+    current_hospital = Hospital.objects.get(user=current_user)
     context = {
-        "all_vaccination_records_json":all_vaccination_records_json
+        'current_hospital':current_hospital
     }
     return render(request,'application/authenticated/all_vaccinations.html',context)
