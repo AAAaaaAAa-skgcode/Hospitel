@@ -24,6 +24,7 @@
         height: 100%;
         width: 100%;
         min-height: 150px;
+        transform: scale(0.6) translate(0%, -30%);
       }
 
       .zc-ref {
@@ -59,19 +60,13 @@
             state.items.push(key);
             state.values.push(value);
           }
-          console.log("STATE:", state);
-
-          for (var i in Object.keys(state)) {
-            console.log("[", i, "]", state.items[i]);
-            console.log("[", i, "]", state.values[i]);
-          }
-          
+          console.log("STATE:", state);      
             
           let myChart = document.getElementById("myChart").getContext("2d");
 
           // Global Options
           Chart.defaults.global.defaultFontFamily = "Lato";
-          Chart.defaults.global.defaultFontSize = 18;
+          Chart.defaults.global.defaultFontSize = 20;
           Chart.defaults.global.defaultFontColor = "#777";
           let massPopChart = new Chart(myChart, {
             type: "pie", // bar, horizontalBar, pie, line, doughnut, radar, polarArea

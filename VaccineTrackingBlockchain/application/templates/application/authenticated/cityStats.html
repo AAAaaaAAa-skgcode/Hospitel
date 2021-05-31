@@ -59,13 +59,7 @@
             state.items.push(key);
             state.values.push(value);
           }
-          console.log("STATE:", state);
-
-          for (var i in Object.keys(state)) {
-            console.log("[", i, "]", state.items[i]);
-            console.log("[", i, "]", state.values[i]);
-          }
-          
+          console.log("STATE:", state);     
             
           let myChart = document.getElementById("myChart").getContext("2d");
 
@@ -121,6 +115,14 @@
               },
               tooltips: {
                 enabled: true,
+              },
+              scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    },
+                }]
               },
             },
           });
