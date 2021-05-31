@@ -388,7 +388,31 @@ def statsPerAge(request):
     return render(request,'application/authenticated/ageStats.html')
 
 def agestats(request):
-    return JsonResponse(stats_json_generator('age'))    
+    temps = stats_json_generator('age')
+    age1 = 0
+    age2 = 0
+    age3 = 0
+    age4 = 0
+    print(temps)
+    for key in temps.keys():
+        print(key)
+        if (int(key) < 14): 
+            age1 = age1 + int(temps[key]) 
+        elif (int(key) < 24): 
+            age2 = age2 + int(temps[key]) 
+        elif (int(key) < 64): 
+            age3 = age3 + int(temps[key]) 
+        else:
+            age4 = age4 + int(temps[key]) 
+
+    final = {
+        "0-14" : age1,
+        "15-24": age2,
+        "25-64": age3,
+        "65+"  : age4
+    }
+    print(final)
+    return JsonResponse(final, safe=False)    
     
 def stats_json_generator(field):
     all = search_all()
