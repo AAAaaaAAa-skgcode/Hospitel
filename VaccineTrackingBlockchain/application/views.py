@@ -191,27 +191,6 @@ def add_vaccination(request):
              context = {'err':message}
              return render(request, 'application/authenticated/add_vaccination.html',context)
         
-
-        vaccination = Vaccination.objects.create(
-            ssid = ssid,
-            first_name = first_name,
-            last_name = last_name,
-            age = age,
-            gender = gender,
-            address = address,
-            city = city,
-            country = country,
-            status = status,
-            vaccine_brand = vaccine,
-            completed_doses = completed_doses,
-            symptoms = symptoms,
-            first_dose_date = dose_a,
-            second_dose_date = dose_b,
-            hospital = current_hospital
-        )
-        if vaccination == None:
-            context = {'err':"Κάτι πήγε στραβά"}
-            return render(request, 'application/authenticated/add_vaccination.html',context)
         
         create_vaccination(
             current_hospital.public_key,
@@ -276,23 +255,6 @@ def update_vaccination(request,amka):
         print(ssid,first_name,symptoms)
         print("=============================\n")
 
-        #update local
-        current_vaccination = Vaccination.objects.get(ssid=amka)
-        current_vaccination.ssid = ssid
-        current_vaccination.first_name = first_name
-        current_vaccination.last_name = last_name
-        current_vaccination.age = age
-        current_vaccination.gender = gender
-        current_vaccination.address = address
-        current_vaccination.city = city
-        current_vaccination.country = country
-        current_vaccination.status = status
-        current_vaccination.vaccine_brand = Vaccine.objects.get(brand=vbrand)
-        current_vaccination.completed_doses = completed_doses
-        current_vaccination.symptoms = symptoms
-        current_vaccination.first_dose_date = dose_a
-        current_vaccination.second_dose_date = dose_b
-        current_vaccination.save()
 
         #update BigChain
         state = update_vaccination_bigchain(
@@ -426,26 +388,18 @@ def stats_json_generator(field):
     for item in json_all:
         temp_list_of_found_fields.append(item[field])
     
+    set_temp_list_of_found_fieldsset = set(temp_list_of_found_fields)
     #gia kathe diaforetiki eggrafi metrao poses fores vrethike sto json
-    for listitem in temp_list_of_found_fields:
-        # -1 giati to json kanei 1 parapano iteration se keno record
+    for setitem in set_temp_list_of_found_fieldsset:
         count_json_records = 0
-        for json_record in json_all:
-            try:
-                json_record[listitem]
-            except KeyError:
-                pass
-            count_json_records +=1
+        for listitem in temp_list_of_found_fields:
+            if listitem == setitem:
+                count_json_records+=1
 
-        returned_json[listitem] = count_json_records
+        returned_json[setitem] = count_json_records
 
     return returned_json
 
-@login_required(login_url="login")
-def all_vaccinations_data(request):
-    all_vaccination_records = search_all()
-    all_vaccination_records_json = json.loads(all_vaccination_records)
-    return JsonResponse(all_vaccination_records_json,safe=False)
 
 @login_required(login_url="login")
 def all_vaccinations(request):
@@ -454,6 +408,7 @@ def all_vaccinations(request):
     current_user = request.user
     current_hospital = Hospital.objects.get(user=current_user)
     context = {
-        'current_hospital':current_hospital
+        'current_hospital':current_hospital,
+        'all_vaccination_records_json':all_vaccination_records_json
     }
     return render(request,'application/authenticated/all_vaccinations.html',context)
