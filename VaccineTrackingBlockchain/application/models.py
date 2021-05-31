@@ -65,5 +65,5 @@ class Vaccination(models.Model):
     completed_doses = models.IntegerField(choices=number_of_doses , default=0)
     symptoms = models.CharField(max_length=2000,default="",blank=True,null=True)
     first_dose_date = models.DateField(null=True)
-    second_dose_date = models.DateField(null=True)
+    second_dose_date = models.DateField(blank=True, null=True)
     hospital = models.ForeignKey(Hospital,on_delete=models.CASCADE)

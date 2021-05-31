@@ -177,7 +177,8 @@ def add_vaccination(request):
         completed_doses = request.POST.get('compldoses')
         status = request.POST.get('status')
         symptoms = request.POST.get('symptoms')
-
+        if dose_b == "": 
+            dose_b = None
 
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
@@ -346,18 +347,17 @@ def update_vaccination(request,amka):
     return render(request, 'application/authenticated/update_vaccination.html',context)
 
 
-@login_required(login_url="login")
-def stats(request):
-    print(stats_json_generator('city'))
-    print(stats_json_generator('hospital'))
-    print(stats_json_generator('country'))
-    print(stats_json_generator('symptoms'))
-    print(stats_json_generator('age'))
+# @login_required(login_url="login")
+# def stats(request):
+#     print(stats_json_generator('city'))
+#     print(stats_json_generator('hospital'))
+#     print(stats_json_generator('country'))
+#     print(stats_json_generator('symptoms'))
+#     print(stats_json_generator('age'))
+#     return render(request,'application/authenticated/stats.html')
 
-    return render(request,'application/authenticated/stats.html')
-
-def resultdata(request):  
-    return JsonResponse(stats_json_generator('hosprital'))
+# def resultdata(request):  
+#     return JsonResponse(stats_json_generator('hosprital'))
 
 
 @login_required(login_url="login")
