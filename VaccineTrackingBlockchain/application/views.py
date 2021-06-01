@@ -179,17 +179,21 @@ def add_vaccination(request):
         symptoms = request.POST.get('symptoms')
         if dose_b == "": 
             dose_b = None
-
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
-        if avl_doses_of_vacc.free_amount >= vaccine.doses:
-            avl_doses_of_vacc.free_amount -= vaccine.doses
-            avl_doses_of_vacc.reserved += vaccine.doses
-            avl_doses_of_vacc.save()
+       
+        if status == 'canceled':
+            avl_doses_of_vacc.free_amount += vaccine.doses
+            avl_doses_of_vacc.reserved -= vaccine.doses
         else:
-             message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
-             context = {'err':message}
-             return render(request, 'application/authenticated/add_vaccination.html',context)
+            if avl_doses_of_vacc.free_amount >= vaccine.doses:
+                avl_doses_of_vacc.free_amount -= vaccine.doses
+                avl_doses_of_vacc.reserved += vaccine.doses
+                avl_doses_of_vacc.save()
+            else:
+                message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
+                context = {'err':message}
+                return render(request, 'application/authenticated/add_vaccination.html',context)
         
         
         create_vaccination(
@@ -255,6 +259,13 @@ def update_vaccination(request,amka):
         print(ssid,first_name,symptoms)
         print("=============================\n")
 
+        print("-----",status)
+        vaccine = Vaccine.objects.get(brand=vbrand)
+        avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
+        if status == 'canceled':
+            avl_doses_of_vacc.free_amount += vaccine.doses
+            avl_doses_of_vacc.reserved -= vaccine.doses
+            avl_doses_of_vacc.save()
 
         #update BigChain
         state = update_vaccination_bigchain(
