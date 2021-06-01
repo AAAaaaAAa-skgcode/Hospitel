@@ -377,7 +377,7 @@ def agestats(request):
     return JsonResponse(final, safe=False)    
     
 def stats_json_generator(field):
-    all = search_all()
+    all = search_status('completed')
     returned_json = {}
     temp_list_of_found_fields = []
 

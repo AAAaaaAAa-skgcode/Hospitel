@@ -89,7 +89,7 @@ def search_amka(amka):
 
 def search_status(status):
     stat = bdb.metadata.get(search = status)
-    print(stat)
+    # print(stat)
     userlist = get_metadata(stat)
     list1 = []
     for x in userlist:
