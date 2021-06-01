@@ -179,9 +179,14 @@ def add_vaccination(request):
         symptoms = request.POST.get('symptoms')
         if dose_b == "": 
             dose_b = None
+        if dose_b <= dose_a:
+            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            context = {'err':message}
+            return render(request, 'application/authenticated/add_vaccination.html',context)
+
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
-       
+    
         if status == 'canceled':
             avl_doses_of_vacc.free_amount += vaccine.doses
             avl_doses_of_vacc.reserved -= vaccine.doses
@@ -194,8 +199,6 @@ def add_vaccination(request):
                 message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
                 context = {'err':message}
                 return render(request, 'application/authenticated/add_vaccination.html',context)
-        
-        
         create_vaccination(
             current_hospital.public_key,
             current_hospital.private_key,
@@ -259,7 +262,31 @@ def update_vaccination(request,amka):
         print(ssid,first_name,symptoms)
         print("=============================\n")
 
-        print("-----",status)
+       
+        if dose_b <= dose_a:
+            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            print(message)
+            current_vaccintaion_bigchain_record = search_amka(amka)
+            vaccination_json = json.loads(current_vaccintaion_bigchain_record)
+            context = {
+                'current_amka':vaccination_json[0]['amka'],
+                'current_name':vaccination_json[0]['name'],
+                'current_age':vaccination_json[0]['age'],
+                'current_gender':vaccination_json[0]['gender'],
+                'current_country':vaccination_json[0]['country'],
+                'current_city':vaccination_json[0]['city'],
+                'current_address':vaccination_json[0]['address'],
+                'current_vaccine_brand':vaccination_json[0]['vaccine_brand'],
+                'current_first_dose':vaccination_json[0]['first_dose_date'],
+                'current_second_dose':None,
+                'current_symptoms':vaccination_json[0]['symptoms'],
+                'current_completed_doses':int(vaccination_json[0]['completed_doses']),
+                'current_status':vaccination_json[0]['status'],
+                'err':message
+            }
+            # return HttpResponseRedirect('/updateVaccination/'+ssid,context)   
+            return render(request, 'application/authenticated/update_vaccination.html',context)
+
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
         if status == 'canceled':
@@ -279,7 +306,7 @@ def update_vaccination(request,amka):
             first_date = dose_a,
             second_date = dose_b
         )
-        print(state)
+        # print(state)
 
         current_vaccintaion_bigchain_record = search_amka(amka)
         vaccination_json = json.loads(current_vaccintaion_bigchain_record)
@@ -298,9 +325,7 @@ def update_vaccination(request,amka):
             'current_completed_doses':int(vaccination_json[0]['completed_doses']),
             'current_status':vaccination_json[0]['status'],
         }
-        return HttpResponseRedirect('/updateVaccination/'+ssid,context)
-
-    
+        return HttpResponseRedirect('/updateVaccination/'+ssid,context)   
     context = {
         'current_amka':vaccination_json[0]['amka'],
         'current_name':vaccination_json[0]['name'],
@@ -318,20 +343,6 @@ def update_vaccination(request,amka):
         
     }
     return render(request, 'application/authenticated/update_vaccination.html',context)
-
-
-# @login_required(login_url="login")
-# def stats(request):
-#     print(stats_json_generator('city'))
-#     print(stats_json_generator('hospital'))
-#     print(stats_json_generator('country'))
-#     print(stats_json_generator('symptoms'))
-#     print(stats_json_generator('age'))
-#     return render(request,'application/authenticated/stats.html')
-
-# def resultdata(request):  
-#     return JsonResponse(stats_json_generator('hosprital'))
-
 
 @login_required(login_url="login")
 def statsPerHospital(request):
