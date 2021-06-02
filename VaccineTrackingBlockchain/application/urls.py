@@ -9,7 +9,7 @@ urlpatterns = [
     path('addVaccination',views.add_vaccination,name="add_vaccination"),
     path('updateVaccination/<str:amka>', views.update_vaccination, name='updateVaccination'),
     path('allVaccinations',views.all_vaccinations,name="all_vaccinations"),
-        
+    path('allVaccinationsJson',views.all_vaccinations_data,name="all_vaccinations_data"),       
     #path('resultdata',views.resultdata,name="resultdata"),
     #path('stats',views.stats,name="stats"),
 

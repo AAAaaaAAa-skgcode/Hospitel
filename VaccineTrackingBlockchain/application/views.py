@@ -424,6 +424,12 @@ def stats_json_generator(field):
 
 
 @login_required(login_url="login")
+def all_vaccinations_data(request):
+    all_vaccination_records = search_all()
+    all_vaccination_records_json = json.loads(all_vaccination_records)
+    return JsonResponse(all_vaccination_records_json,safe=False)
+
+@login_required(login_url="login")
 def all_vaccinations(request):
     all_vaccination_records = search_all()
     all_vaccination_records_json = json.loads(all_vaccination_records)
