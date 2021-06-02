@@ -25,10 +25,10 @@ def get_both(id):
                 if (x.get('metadata', {}).get('completed_doses') != None):
                     usersc['completed_doses'] = x['metadata']['completed_doses']
                 if (x.get('metadata', {}).get('symptoms') != None):
-                    concat = usersc['symptoms']
-                    if (x['metadata']['symptoms'] not in concat):
-                        concat = concat + ', ' + x['metadata']['symptoms']
-                        usersc['symptoms'] = concat
+#                     concat = usersc['symptoms']
+#                     if (x['metadata']['symptoms'] not in concat):
+#                         concat = concat + ', ' + x['metadata']['symptoms']
+                    usersc['symptoms'] = x['metadata']['symptoms']
                 if (x.get('metadata', {}).get('first_date') != None):
                     usersc['first_dose_date'] = x['metadata']['first_date']
                 if (x.get('metadata', {}).get('second_date') != None):
