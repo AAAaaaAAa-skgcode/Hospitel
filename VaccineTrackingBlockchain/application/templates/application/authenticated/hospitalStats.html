@@ -1,48 +1,126 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Statistics</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
+<head>
+  <meta charset="utf-8" />
+  <title>Statistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
+  <link rel="icon" href="{% static 'img/logo.png' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" <link
+    rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="{% static 'index.css' %}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    #myChart {
+      min-height: 150px;
+      height: 100%;
+      width: 100%;
+    }
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-      html,
-      body {
-        height: 100%;
-        width: 100%;
-      }
+    .zc-ref {
+      display: none;
+    }
+  </style>
+</head>
 
-      #myChart {
-        height: 100%;
-        width: 100%;
-        min-height: 150px;
-      }
-
-      .zc-ref {
-        display: none;
-      }
-    </style>
-  </head>
-
-  <body>
-
-    <div class="container">
-      <canvas id="myChart"></canvas>
+<body>
+  <input type="checkbox" id="sidebar__toggle">
+  <div class="sidebar">
+    <div class="sidebar__header">
+      <img src="https://img.icons8.com/cotton/64/000000/add-to-database.png" alt="database" />
+      <h3 class="brand">
+        <span>VacciChain</span>
+      </h3>
+      <label for="sidebar__toggle" class="las la-bars"></label>
     </div>
+    <div class="sidebar__menu">
+      <ul class="sidebar__menu--ul">
+        <li>
+          <a href='{% url "add_vaccination" %}'>
+            <span class="fas fa-syringe"></span>
+            <span>Add a Vaccination</span>
+          </a>
+        </li>
+        <li>
+          <a href='{% url "all_vaccinations" %}'>
+            <span class="fas fa-folder-open"></span>
+            <span>All Vaccinations</span>
+          </a>
+        </li>
+        <div class="sidebar__submenu--head">
+          <span class="far fa-chart-bar"></span>
+          <span>Statistics</span>
+        </div>
+        <ul class="sidebar__submenu">
+          <li>
+            <a href='{% url "statsPerHospital" %}'>
+              <span>By Hospital</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCity" %}'>
+              <span>By City</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerAge" %}'>
+              <span>By Age</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCountry" %}'>
+              <span>By Country</span>
+            </a>
+          </li>
+        </ul>
+        <li>
+          <a href='{% url "hospital_profile" %}'>
+            <span class="fas fa-user"></span>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href='{% url "logout_view" %}'>
+            <span class="fas fa-sign-out-alt"></span>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="main__content">
+    <header>
+      <div class="main__info">
+        <div class="main__hospital">
+          <div class="main__icon"></div>
+        </div>
+        <div class="main__dropdown">
+          <button class="main__dropbtn">{{current_hospital.name}}
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="main__dropdown--content">
+            <a href='{% url "logout_view" %}'><i class="fas fa-sign-out-alt"></i>Logout</a>
+          </div>
+        </div>
+    </header>
+    <main>
+      <div class="main__container">
+        <canvas id="myChart"></canvas>
+      </div>
+    </main>
     <script>
       var state = {
         items: [],
         values: [],
       };
-           
+
       var dataURL = "/hospitalstats";
       $.ajax({
         method: "GET",
@@ -59,7 +137,13 @@
             state.items.push(key);
             state.values.push(value);
           }
-          console.log("STATE:", state);          
+          console.log("STATE:", state);
+
+          for (var i in Object.keys(state)) {
+            console.log("[", i, "]", state.items[i]);
+            console.log("[", i, "]", state.values[i]);
+          }
+
           let myChart = document.getElementById("myChart").getContext("2d");
 
           // Global Options
@@ -74,7 +158,6 @@
                 {
                   label: "Ammount Of Vaccines",
                   data: state.values,
-                  //backgroundColor:'green',
                   backgroundColor: [
                     "rgba(255, 99, 132, 0.6)",
                     "rgba(54, 162, 235, 0.6)",
@@ -115,18 +198,11 @@
               tooltips: {
                 enabled: true,
               },
-              scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true
-                    },
-                }]
-              },
             },
           });
         },
       });
     </script>
-  </body>
+</body>
+
 </html>
