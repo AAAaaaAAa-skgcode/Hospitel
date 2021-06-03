@@ -54,6 +54,14 @@
             <span>All Vaccinations</span>
           </a>
         </li>
+        <!--
+                <li>
+                    <a href="">
+                        <span class="far fa-chart-bar"></span>
+                        <span>Statistics</span>
+                    </a>
+                </li>
+                -->
         <div class="sidebar__submenu--head">
           <span class="far fa-chart-bar"></span>
           <span>Statistics</span>
@@ -109,6 +117,7 @@
             <a href='{% url "logout_view" %}'><i class="fas fa-sign-out-alt"></i>Logout</a>
           </div>
         </div>
+      </div>
     </header>
     <main>
       <div class="main__container">
@@ -158,6 +167,7 @@
                 {
                   label: "Ammount Of Vaccines",
                   data: state.values,
+                  //backgroundColor:'green',
                   backgroundColor: [
                     "rgba(255, 99, 132, 0.6)",
                     "rgba(54, 162, 235, 0.6)",

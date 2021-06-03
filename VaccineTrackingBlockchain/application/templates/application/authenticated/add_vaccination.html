@@ -3,20 +3,21 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="icon" href="{% static 'img/logo.png' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css" />
+    <link rel="icon" href="{% static 'img/logo.png' %}" />
     <link rel="stylesheet"
         href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
     <link rel="stylesheet" href="{% static 'index.css' %}" />
+    <script src="{% static 'vaccichain.js' %}"></script>
 </head>
 
 <body>
-    <input type="checkbox" id="sidebar__toggle">
+    <input type="checkbox" id="sidebar__toggle" />
     <div class="sidebar">
         <div class="sidebar__header">
             <img src="https://img.icons8.com/cotton/64/000000/add-to-database.png" alt="database" />
@@ -39,14 +40,6 @@
                         <span>All Vaccinations</span>
                     </a>
                 </li>
-                <!--
-                <li>
-                    <a href="">
-                        <span class="far fa-chart-bar"></span>
-                        <span>Statistics</span>
-                    </a>
-                </li>
-                -->
                 <div class="sidebar__submenu--head">
                     <span class="far fa-chart-bar"></span>
                     <span>Statistics</span>
@@ -95,145 +88,151 @@
                     <div class="main__icon"></div>
                 </div>
                 <div class="main__dropdown">
-                    <button class="main__dropbtn">{{current_hospital.name}}
+                    <button class="main__dropbtn">
+                        {{current_hospital.name}}
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="main__dropdown--content">
                         <a href='{% url "logout_view" %}'><i class="fas fa-sign-out-alt"></i>Logout</a>
                     </div>
                 </div>
+            </div>
         </header>
         <main>
             <div class="main__container">
-                <h1 style="color:red">{{err}}</h3>
-                    <div class="container__info">
-                        <p class="form__message--p"><i class="far fa-plus-square"></i>Add a new vaccination</p>
-                    </div>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="container__form">
-                            <div class="container__sesion">
-                                <div class="container__input--info">
-                                    <i class="fa fa-user"></i>Citizen Data
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <i class="far fa-id-badge icon"></i></i>
-                                        <input class="container__input--field" type="text" placeholder="A.M.K.A"
-                                            name="amka" id="amka" maxlength="10" minlength="10" required
-                                            autocomplete="off" />
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <i class="far fa-user icon"></i>
-                                        <input class="container__input--field" type="text" placeholder="Full Name"
-                                            name="fname" id="fname" required autocomplete="off" />
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <i class="fas fa-transgender icon"></i>
-                                        <select id="mySelect" name="mySelect">
-                                            <option value="">Select Gender</option>
-                                            <option value="female">Female</option>
-                                            <option value="male">Male</option>
-                                        </select>
-                                    </div>
-                                    <div class="container__input--column">
-                                        <i class="far fa-user icon"></i>
-                                        <input class="container__input--field" type="number" placeholder="Age"
-                                            name="age" id="age" required autocomplete="off" />
-                                    </div>
-                                </div>
-                                <div class="container__input--info">
-                                    <i class="far fa-address-book"></i>Address
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <i class="fas fa-street-view icon"></i>
-                                        <input class="container__input--field" type="text" placeholder="Street,Number"
-                                            name="street" id="street" autocomplete="off" />
-                                    </div>
-                                    <div class="container__input--column">
-                                        <i class="fas fa-city icon"></i>
-                                        <input class="container__input--field" type="text" placeholder="City"
-                                            name="city" id="city" required autocomplete="off" />
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <i class="fas fa-globe-europe icon"></i>
-                                        <input class="container__input--field" type="text" placeholder="Country"
-                                            name="country" id="country" required autocomplete="off" />
-                                    </div>
+                <h1 style="color: red">{{err}}</h1>
+                <div class="container__info">
+                    <p class="form__message--p"><i class="far fa-plus-square"></i>Add a new vaccination</p>
+                </div>
+                <form method="post" id="form">
+                    {% csrf_token %}
+                    <div class="container__form">
+                        <div class="container__sesion">
+                            <div class="container__input--info"><i class="fa fa-user"></i>Citizen Data</div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <i class="far fa-id-badge icon"></i>
+                                    <input class="container__input--field" type="text" placeholder="A.M.K.A" name="amka"
+                                        id="amka" required minlength="11" maxlength="11" autocomplete="off" />
+                                    <small>Error message</small>
                                 </div>
                             </div>
-                            <div class="container__sesion">
-                                <div class="container__input--info">
-                                    <i class="fas fa-syringe"></i>Vaccination info
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <label for="vbrand">Vaccine Brand</label>
-                                        <i class="fas fa-syringe icon"></i>
-                                        <select id="vbrand" name="vbrand">
-                                            <option value="">Select</option>
-                                            <option value="Pfizer">Pfizer-BioNTech</option>
-                                            <option value="AstraZeneca">AstraZeneca</option>
-                                            <option value="Johnson & Johnson">Johnson & Johnson's Janssen</option>
-                                            <option value="Moderna">Moderna</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <label for="dosea">Dose A</label>
-                                        <i class="far fa-calendar-alt icon"></i>
-                                        <input class="container__input--field" type="date" name="dosea" id="dosea"
-                                            required />
-                                    </div>
-                                    <div class="container__input--column">
-                                        <label for="doseb">Dose B</label>
-                                        <i class="far fa-calendar-alt icon"></i>
-                                        <input class="container__input--field" type="date" name="doseb" id="doseb" />
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <label for="compldoses">Completed Doses</label>
-                                        <i class="fas fa-mouse-pointer icon"></i>
-                                        <select id="compldoses" name="compldoses">
-                                            <option value="">Select</option>
-                                            <option value=0>0</option>
-                                            <option value=1>1</option>
-                                            <option value=2>2</option>
-                                        </select>
-                                    </div>
-                                    <div class="container__input--column">
-                                        <label for="status">Status of Vaccinations</label>
-                                        <i class="fas fa-mouse-pointer icon"></i>
-                                        <select id="status" name="status">
-                                            <option value="">Select</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="completed">Completed</option>
-                                            <option value="canceled">Canceled</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="container__input">
-                                    <div class="container__input--column">
-                                        <label for="symptoms">Symptoms</label>
-                                        <textarea id="symptoms" name="symptoms" rows="4" cols="50">...</textarea>
-                                    </div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <i class="far fa-user icon"></i>
+                                    <input class="container__input--field" type="text" placeholder="Full Name"
+                                        name="fname" id="fname" required autocomplete="off" />
+                                    <small>Error message</small>
                                 </div>
                             </div>
-                            <button type="submit" class="submit__button">Submit</button>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <i class="fas fa-transgender icon"></i>
+                                    <select id="mySelect" name="mySelect" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="female">Female</option>
+                                        <option value="male">Male</option>
+                                    </select>
+                                    <small>Error message</small>
+                                </div>
+                                <div class="container__input--column">
+                                    <i class="far fa-user icon"></i>
+                                    <input class="container__input--field" type="number" placeholder="Age" name="age"
+                                        id="age" required autocomplete="off" />
+                                    <small>Error message</small>
+                                </div>
+                            </div>
+                            <div class="container__input--info"><i class="far fa-address-book"></i>Address</div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <i class="fas fa-street-view icon"></i>
+                                    <input class="container__input--field" type="text" placeholder="Street,Number"
+                                        name="street" id="street" autocomplete="off" />
+                                </div>
+                                <div class="container__input--column">
+                                    <i class="fas fa-city icon"></i>
+                                    <input class="container__input--field" type="text" placeholder="City" name="city"
+                                        id="city" required autocomplete="off" />
+                                    <small>Error message</small>
+                                </div>
+                            </div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <i class="fas fa-globe-europe icon"></i>
+                                    <input class="container__input--field" type="text" placeholder="Country"
+                                        name="country" id="country" required autocomplete="off" />
+                                    <small>Error message</small>
+                                </div>
+                            </div>
                         </div>
-                    </form>
+                        <div class="container__sesion">
+                            <div class="container__input--info"><i class="fas fa-syringe"></i>Vaccination info</div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <label for="vbrand">Vaccine Brand</label>
+                                    <i class="fas fa-syringe icon"></i>
+                                    <select id="vbrand" name="vbrand" required>
+                                        <option value="">Select</option>
+                                        <option value="Pfizer">Pfizer-BioNTech</option>
+                                        <option value="AstraZeneca">AstraZeneca</option>
+                                        <option value="Johnson & Johnson">Johnson & Johnson's Janssen</option>
+                                        <option value="Moderna">Moderna</option>
+                                    </select>
+                                    <small>Error message</small>
+                                </div>
+                            </div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <label for="dosea">Dose A</label>
+                                    <input class="container__input--field" type="date" name="dosea" id="dosea"
+                                        required />
+                                    <small>Error message</small>
+                                </div>
+                                <div class="container__input--column">
+                                    <label for="doseb">Dose B</label>
+                                    <input class="container__input--field" type="date" name="doseb" id="doseb" />
+                                    <small>Error message</small>
+                                </div>
+                            </div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <label for="compldoses">Completed Doses</label>
+                                    <i class="fas fa-mouse-pointer icon"></i>
+                                    <select id="compldoses" name="compldoses" required>
+                                        <option value="">Select</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                    <small>Error message</small>
+                                </div>
+                                <div class="container__input--column">
+                                    <label for="status">Status of Vaccinations</label>
+                                    <i class="fas fa-mouse-pointer icon"></i>
+                                    <select id="status" name="status" required>
+                                        <option value="">Select</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="canceled">Canceled</option>
+                                    </select>
+                                    <small>Error message</small>
+                                </div>
+                            </div>
+                            <div class="container__input">
+                                <div class="container__input--column">
+                                    <label for="symptoms">Symptoms</label>
+                                    <textarea id="symptoms" name="symptoms" rows="4" cols="50">...</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit__button">Submit</button>
+                    </div>
+                </form>
             </div>
         </main>
     </div>
+    <script>
+    </script>
 </body>
 
 </html>

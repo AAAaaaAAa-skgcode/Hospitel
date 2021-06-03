@@ -1,231 +1,232 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css"
-    />
-    <link rel="stylesheet" href="{% static 'index.css' %}"/>
-  </head>
-  <body>
-    <div class="profile-container">
-      <header class="profile-header">
-        <div class="header_avatar">
-          <i class="fas fa-sign-out-alt"></i>
-          <a href='{% url "logout_view" %}'>Logout</a>
-        </div>
-      </header>
-      <aside class="profile-aside">
-        <img src="{% static 'img/logo.png' %}" alt="logo" class="profile-logo" />
-        <nav class="profile-aside_nav">
-          <ul class="profile-aside_list">
-            <li class="profile-aside_list-item">
-              <a href='{% url "add_vaccination" %}' class="profile-aside_list-link"><i class="fas fa-syringe"></i>Add Vaccination</a>
-            </li>
-            <li class="profile-aside_list-item">
-              <a href='{% url "all_vaccinations" %}'class="profile-aside_list-link"><i class="fas fa-folder-open"></i>All Vaccinations</a>
-            </li>
-            <li class="profile-aside_list-item">
-              <a  class="profile-aside_list-link"><i class="far fa-chart-bar"></i>Statistics</a>
-            </li>
-            <li class="profile-aside_list-item">
-              <a href='{% url "hospital_profile" %}' class="profile-aside_list-link"><i class="fas fa-user"></i>Profile</a>
-            </li>
-        </ul>
-        <nav>
-      </aside>
-      <main class="main">
-        <div class="container-main">
-          <div class="container-info">
-            <p class="form_message-p"><i class="far fa-hospital"></i>Hospital Information</p>
-          </div>
-          <form method="post">
-            {% csrf_token %}
-            <div class="container-form">
-              <div class="container-sesion">
-                <div class="input-container">
-                  <i class="far fa-hospital icon"></i>
-                  <input
-                    class="input-field"
-                    type="text"
-                    placeholder="Hospital Name"
-                    name="hospital-name"
-                    id="hospital-name"
-                    required
-                    autocomplete="off"
-                    value={{current_hospital.name}}
-                  />
-                </div>
-                <div class="input-container">
-                  <i class="fas fa-at icon"></i>
-                  <input
-                    class="input-field"
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    id="email"
-                    required
-                    autocomplete="off"
-                    value={{user.email}}
-                  />
-                </div>
-                <div class="input-container">
-                <div class="input-container-column">
-                    <i class="fas fa-street-view icon"></i>
-                    <input
-                      class="input-field"
-                      type="text"
-                      placeholder="Street,Number"
-                      name="street"
-                      id="street"
-                      required
-                      autocomplete="off"
-                      value={{current_hospital.street}}
-                    />
-                  </div>
-                  <div class="input-container-column">
-                    <i class="fas fa-city icon"></i>
-                    <input
-                      class="input-field"
-                      type="text"
-                      placeholder="City"
-                      name="city"
-                      id="city"
-                      required
-                      autocomplete="off"
-                      value={{current_hospital.city}}
-                    />
-                  </div>
-                </div>
-                <div class="input-container">
-                  <div class="input-container-column">
-                    <i class="fas fa-globe-europe icon"></i>
-                    <input
-                      class="input-field"
-                      type="text"
-                      placeholder="Country"
-                      name="country"
-                      id="country"
-                      required
-                      autocomplete="off"
-                      value={{current_hospital.country}}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="container-sesion">
-                <div class="container-input-info">
-                  Pfizer-BioNTech Available doses
-                </div>
-                <div class="input-container-column">
-                <i class="fas fa-syringe icon"></i>
-                  <input
-                    class="input-field"
-                    type="number"
-                    placeholder="Doses"
-                    name="pfizer-doses"
-                    id="pfizer-doses"
-                    value={{current_pfizer.free_amount}}
-                  />
-                </div>
-                <div class="container-input-info">
-                  Moderna Available doses
-                </div>
-                <div class="input-container-column">
-                <i class="fas fa-syringe icon"></i>
-                  <input
-                    class="input-field"
-                    type="number"
-                    placeholder="Doses"
-                    name="moderna-doses"
-                    id="moderna-doses"
-                    value={{current_moderna.free_amount}}
-                  />
-                </div>
-                <div class="container-input-info">
-                  Johnson & Johnson’s Janssen Available doses
-                </div>
-                <div class="input-container-column">
-                <i class="fas fa-syringe icon"></i>
-                  <input
-                    class="input-field"
-                    type="number"
-                    placeholder="Doses"
-                    name="johnson-doses"
-                    id="johnson-doses"
-                    value={{current_johnson.free_amount}}
-                  />
-                </div>
-                <div class="container-input-info">
-                  AstraZeneca Available doses
-                </div>
-                <div class="input-container-column">
-                <i class="fas fa-syringe icon"></i>
-                  <input
-                    class="input-field"
-                    type="number"
-                    placeholder="Doses"
-                    name="astra-doses"
-                    id="astra-doses"
-                    value={{current_astra.free_amount}}
-                  />
-                </div>
-              </div>
+<html lang="en">
 
-              <button type="submit" class="submit-button">Update</button>
-            </div>
-          </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css" />
+  <link rel="icon" href="{% static 'img/logo.png' %}" />
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
+  <link rel="stylesheet" href="{% static 'index.css' %}" />
+</head>
+
+<body>
+  <input type="checkbox" id="sidebar__toggle" />
+  <div class="sidebar">
+    <div class="sidebar__header">
+      <img src="https://img.icons8.com/cotton/64/000000/add-to-database.png" alt="database" />
+      <h3 class="brand">
+        <span>VacciChain</span>
+      </h3>
+      <label for="sidebar__toggle" class="las la-bars"></label>
+    </div>
+    <div class="sidebar__menu">
+      <ul class="sidebar__menu--ul">
+        <li>
+          <a href='{% url "add_vaccination" %}'>
+            <span class="fas fa-syringe"></span>
+            <span>Add a Vaccination</span>
+          </a>
+        </li>
+        <li>
+          <a href='{% url "all_vaccinations" %}'>
+            <span class="fas fa-folder-open"></span>
+            <span>All Vaccinations</span>
+          </a>
+        </li>
+        <div class="sidebar__submenu--head">
+          <span class="far fa-chart-bar"></span>
+          <span>Statistics</span>
         </div>
-      </main>
-      <footer class="profile-footer">
-        <div class="footer">
-          <div class="footer-row">
-            <div class="footer-div-column">
-              <img src="{% static 'img/logo.png' %}" alt="logo" class="footer-img" />
-              <p class="footer-div-p">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
-            </div>
-            <div class="footer-div-row">
-              <div class="footer-div-ul">
-                <a href="">About Us</a>
-                <a href="">Contact</a>
-                <a href="">Support</a>
-              </div>
-            </div>
-            <div class="footer-div-column">
-              <h4 class="footer-div-h2">Contact us</h4>
-              <ul class="footer-div-ul">
-                <li>
-                  <a href=""><i class="fas fa-mobile-alt"></i> +88 0123 456 789</a>
-                </li>
-                <li>
-                  <a href=""><i class="far fa-envelope"></i> info@demo.com</a>
-                </li>
-              </ul>
-              <div class="footer-social">
-                <a href=""><i class="fab fa-facebook-f"></i></a>
-                <a href=""><i class="fab fa-twitter"></i></a>
-                <a href=""><i class="fab fa-linkedin-in"></i></a>
+        <ul class="sidebar__submenu">
+          <li>
+            <a href='{% url "statsPerHospital" %}'>
+              <span>By Hospital</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCity" %}'>
+              <span>By City</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerAge" %}'>
+              <span>By Age</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCountry" %}'>
+              <span>By Country</span>
+            </a>
+          </li>
+        </ul>
+        <li>
+          <a href='{% url "hospital_profile" %}'>
+            <span class="fas fa-user"></span>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href='{% url "logout_view" %}'>
+            <span class="fas fa-sign-out-alt"></span>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="main__content">
+    <header>
+      <div class="main__info">
+        <div class="main__hospital">
+          <div class="main__icon"></div>
+        </div>
+        <div class="main__dropdown">
+          <button class="main__dropbtn">
+            {{current_hospital.name}}
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="main__dropdown--content">
+            <a href='{% url "logout_view" %}'><i class="fas fa-sign-out-alt"></i>Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="main__container">
+        <div class="container__info">
+          <p class="form__message--p"><i class="far fa-hospital"></i>Hospital Profile</p>
+        </div>
+        <div class="main__cards">
+          <div class="main__card">
+            <div class="main__card--flex">
+              <div class="main__card--info">
+                <div class="main__card--head">
+                  <span>Pfizer -BioNTech</span>
+                  <small>Number of Doses</small>
+                  <h2>{{current_pfizer.free_amount}}</h2>
+                </div>
               </div>
             </div>
           </div>
-            <div class="footer-row-copy">
-              <p>&copy; 2020 all rights reserved. Made with &hearts;</p>
-          <div> 
-        </div> 
-    </footer>
+          <div class="main__card">
+            <div class="main__card--flex">
+              <div class="main__card--info">
+                <div class="main__card--head">
+                  <span>Moderna</span>
+                  <small>Number of Doses</small>
+                  <h2>{{current_moderna.free_amount}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="main__card">
+            <div class="main__card--flex">
+              <div class="main__card--info">
+                <div class="main__card--head">
+                  <span>Johnson & Johnson's</span>
+                  <small>Number of Doses</small>
+                  <h2>{{current_johnson.free_amount}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="main__card">
+            <div class="main__card--flex">
+              <div class="main__card--info">
+                <div class="main__card--head">
+                  <span>AstraZeneca</span>
+                  <small>Number of Doses</small>
+                  <h2>{{current_astra.free_amount}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="container__form">
+            <div class="container__sesion">
+              <div class="container__input--info"><i class="fa fa-user"></i>Hospital Information</div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <i class="far fa-hospital icon"> </i>
+                  <input class="container__input--field" type="text" placeholder="Hospital Name" name="hospital-name"
+                    id="hospital-name" required autocomplete="off" value="{{current_hospital.name}}" />
+                </div>
+                <div class="container__input--column">
+                  <i class="fas fa-at icon"></i>
+                  <input class="container__input--field" type="email" placeholder="Email" name="email" id="email"
+                    required autocomplete="off" value="{{user.email}}" />
+                </div>
+              </div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <i class="fas fa-street-view icon"></i>
+                  <input class="container__input--field" type="text" placeholder="Street,Number" name="street"
+                    id="street" required autocomplete="off" value="{{current_hospital.street}}" />
+                </div>
+                <div class="container__input--column">
+                  <i class="fas fa-city icon"></i>
+                  <input class="container__input--field" type="text" placeholder="City" name="city" id="city" required
+                    autocomplete="off" value="{{current_hospital.city}}" />
+                </div>
+              </div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <i class="fas fa-globe-europe icon"></i>
+                  <input class="container__input--field" type="text" placeholder="Country" name="country" id="country"
+                    required autocomplete="off" value="{{current_hospital.country}}" />
+                </div>
+              </div>
+            </div>
+            <div class="container__sesion">
+              <div class="container__input--info"><i class="fas fa-syringe"></i>Available doses of COVID vaccine</div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <label for="pfizer-doses">Pfizer-BioNTech</label>
+                  <i class="fas fa-syringe icon"></i>
+                  <input class="container__input--field" type="number" placeholder="Doses" name="pfizer-doses"
+                    id="pfizer-doses" value="{{current_pfizer.free_amount}}" />
+                </div>
+              </div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <label for="moderna-doses">Moderna</label>
+                  <i class="fas fa-syringe icon"></i>
+                  <input class="container__input--field" type="number" placeholder="Doses" name="moderna-doses"
+                    id="moderna-doses" value="{{current_moderna.free_amount}}" />
+                </div>
+              </div>
+              <div class="container__input">
+                <div class="container__input--column">
+                  <label for="johnson-doses">Johnson & Johnson’s Janssen</label>
+                  <i class="fas fa-syringe icon"></i>
+                  <input class="container__input--field" type="number" placeholder="Doses" name="johnson-doses"
+                    id="johnson-doses" value="" />
+                </div>
+              </div>
+              <div>
+                <div class="container__input--column">
+                  <label for="johnson-doses">AstraZeneca</label>
+                  <i class="fas fa-syringe icon"></i>
+                  <input class="container__input--field" type="number" placeholder="Doses" name="astra-doses"
+                    id="astra-doses" value="{{current_astra.free_amount}}" />
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="submit__button">Update</button>
+          </div>
+        </form>
+      </div>
+    </main>
   </div>
-    <script src="" async defer></script>
-  </body>
+</body>
+
 </html>
