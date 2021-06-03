@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
   <link rel="icon" href="{% static 'img/logo.png' %}" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css" />
   <link rel="stylesheet"
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" />
   <link rel="stylesheet" href="{% static 'index.css' %}" />
@@ -34,11 +34,15 @@
     .completed,
     .canceled,
     .pending {
-      font-size: 15px;
+      font-size: 14px;
       color: white;
-      padding: 2px;
+      padding: 4px;
       display: block;
       border-radius: 3px;
+    }
+
+    td.gridjs-td {
+      padding: 6px 12px;
     }
 
     tr.gridjs-tr:nth-child(even) td {
@@ -55,8 +59,7 @@
     }
 
     .my-custom-td-class {
-      color: #8390A2;
-
+      color: #8390a2;
     }
 
     .edit {
@@ -76,7 +79,7 @@
 </head>
 
 <body>
-  <input type="checkbox" id="sidebar__toggle">
+  <input type="checkbox" id="sidebar__toggle" />
   <div class="sidebar">
     <div class="sidebar__header">
       <img src="https://img.icons8.com/cotton/64/000000/add-to-database.png" alt="database" />
@@ -86,7 +89,7 @@
       <label for="sidebar__toggle" class="las la-bars"></label>
     </div>
     <div class="sidebar__menu">
-      <ul>
+      <ul class="sidebar__menu--ul">
         <li>
           <a href='{% url "add_vaccination" %}'>
             <span class="fas fa-syringe"></span>
@@ -99,12 +102,32 @@
             <span>All Vaccinations</span>
           </a>
         </li>
-        <li>
-          <a href="">
-            <span class="far fa-chart-bar"></span>
-            <span>Statistics</span>
-          </a>
-        </li>
+        <div class="sidebar__submenu--head">
+          <span class="far fa-chart-bar"></span>
+          <span>Statistics</span>
+        </div>
+        <ul class="sidebar__submenu">
+          <li>
+            <a href='{% url "statsPerHospital" %}'>
+              <span>By Hospital</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCity" %}'>
+              <span>By City</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerAge" %}'>
+              <span>By Age</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url "statsPerCountry" %}'>
+              <span>By Country</span>
+            </a>
+          </li>
+        </ul>
         <li>
           <a href='{% url "hospital_profile" %}'>
             <span class="fas fa-user"></span>
@@ -127,21 +150,22 @@
           <div class="main__icon"></div>
         </div>
         <div class="main__dropdown">
-          <button class="main__dropbtn">{{current_hospital.name}}
+          <button class="main__dropbtn">
+            {{current_hospital.name}}
             <i class="fa fa-caret-down"></i>
           </button>
           <div class="main__dropdown--content">
             <a href='{% url "logout_view" %}'><i class="fas fa-sign-out-alt"></i>Logout</a>
           </div>
         </div>
+      </div>
     </header>
     <main>
       <div class="main__container"></div>
     </main>
     <script type="module">
       const grid = new gridjs.Grid({
-        columns: ["AMKA",
-          "Name", "Age", "Gender", "Hospital", "Country", "Status", "1st Dose", "2nd Dose", "Symptoms", "Actions"],
+        columns: ["AMKA", "Name", "Age", "Gender", "Hospital", "Country", "Status", "1st Dose", "2nd Dose", "Symptoms", "Actions"],
         server: {
           url: "/allVaccinationsJson",
           then: (data) =>
@@ -156,33 +180,10 @@
               vaccine.first_dose_date,
               vaccine.second_dose_date,
               vaccine.symptoms,
-              //"HOSSP" == vaccine.hospital ? gridjs.html("<a class='action' href=''>" + "<i class='far fa-edit'>" + " " + "Edit" + "</a>") : "",
-              "{{current_hospital.name}}" == vaccine.hospital ? gridjs.html(`<a class='edit' href='updateVaccination/${vaccine.amka}'>` + `<i class='far fa-edit'>` + `</a>`) : ""
+              "{{current_hospital.name}}" == vaccine.hospital
+                ? gridjs.html(`<a class='edit' href='updateVaccination/${vaccine.amka}'>` + `<i class='far fa-edit'>` + `</a>`)
+                : "",
             ]),
-          //data: (opts) => {
-          //return new Promise((resolve, reject) => {
-          // let's implement our own HTTP client
-          //const xhttp = new XMLHttpRequest();
-          // xhttp.onreadystatechange = function () {
-          // if (this.readyState === 4) {
-          //if (this.status === 200) {
-          //const resp = JSON.parse(this.response);
-
-          // make sure the output conforms to StorageResponse format:
-          // https://github.com/grid-js/gridjs/blob/master/src/storage/storage.ts#L21-L24
-          //resolve({
-          //data: resp.data.map((card) => [card.name, card.lang, card.released_at, card.artist]),
-          //total: resp.total_cards,
-          // });
-          //} else {
-          //reject();
-          //}
-          //}
-          //};
-          //xhttp.open("GET", opts.url, true);
-          // xhttp.send();
-          // });
-          //},
         },
         pagination: {
           limit: 10,
@@ -202,27 +203,26 @@
         },
         style: {
           table: {
-            "white-space": "nowrap",
-            "width": "-webkit-fill-available",
+            "font-size": "14px",
+            width: "-webkit-fill-available",
           },
           th: {
             "background-color": "#198590",
-            "color": "white",
+            color: "white",
             "border-bottom": "3px solid #198590",
             "text-align": "center",
-            "font-size": "1rem",
+            "font-size": ".9rem",
             "font-weight": "500",
+            width: "auto",
           },
           td: {
             "text-align": "center",
-            "min-width": "fit-content"
+            "min-width": "fit-content",
           },
         },
-      }).render(document.querySelector('.main__container'));
-
-
+      }).render(document.querySelector(".main__container"));
     </script>
-
+  </div>
 </body>
 
 </html>

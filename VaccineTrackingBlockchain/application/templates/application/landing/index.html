@@ -1,294 +1,207 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{% static 'index.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css"
-    />
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <header class="header-login">
-      <img src="{% static 'img/logo.png' %}" alt="logo" class="header-img" />
-    </header>
-    
-    <main class="main-login">
-      <div class="container-login">
-        {% if err != None%}
-          {{err}}
-        {% endif %}
-        <div class="form-tab">
-          <button
-            class="form-tablinks"
-            onclick="openForm(event, 'Sign-In')"
-            id="defaultOpen"
-          >
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title></title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'index.css' %}" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="header__login">
+    <div class="header__login--svg">
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path
+          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+          class="shape-fill"></path>
+      </svg>
+    </div>
+    <img src="{% static 'img/logo.png' %}" alt="logo" class="header__img" />
+  </div>
+  <div class="main__login">
+    <div class="main__container">
+      <!--{% if err != None%}
+        <div class="alert">{{err}}</div>
+          {% endif %}-->
+      <div class="container__login">
+        <div class="form__tab">
+          <button class="form__tablinks" onclick="openForm(event, 'Sign-In')" id="defaultOpen">
             Sign In
           </button>
-          <button
-            class="form-tablinks"
-            onclick="openForm(event,'Sign-Up')"
-            id="tab2"
-          >
+          <button class="form__tablinks" onclick="openForm(event,'Sign-Up')" id="tab2">
             Sign Up
           </button>
         </div>
 
-        <div id="Sign-In" class="form-tabcontent">
+        <div id="Sign-In" class="form__tabcontent">
           <form method='POST'>
             {% csrf_token %}
             <input id="login_key" name="login_key" value="login_key" hidden>
-            <div class="container-form">
-              <div class="form_message">
-                <h2 class="form_message-h2">Welcome back</h2>
-                <p class="form_message-p">Sign In to your account</p>
+            <div class="container__form">
+              <div class="form__message">
+                <h2 class="form__message--h2">Welcome back</h2>
+                <p class="form__message--p">Sign In to your account</p>
               </div>
-              <div class="input-container">
+              <div class="container__input">
                 <i class="fas fa-at icon"></i>
-                <input
-                  class="input-field"
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  id="email"
-                  required
-                  autocomplete="off"
-                />
+                <input class="container__input--field" type="email" placeholder="Email" name="email" id="email" required
+                  autocomplete="off" />
               </div>
-              <div class="input-container">
+              <div class="container__input">
                 <i class="fa fa-unlock icon"></i>
-                <input
-                  type="password"
-                  placeholder="Enter Password"
-                  name="password"
-                  id="password"
-                  required
-                  autocomplete="off"
-                />
+                <input type="password" placeholder="Enter Password" name="password" id="password" required
+                  autocomplete="off" />
               </div>
-              <div class="input-container">
-                <input
-                  type="checkbox"
-                  placeholder=""
-                  name="check"
-                  id="check"
-                  autocomplete="off"
-                />
-                <p class="input-p">Remember me</p>
+              <div class="container__input_remember">
+                <input type="checkbox" placeholder="" name="check" id="check" autocomplete="off" />
+                <p class="input__p">Remember me</p>
               </div>
-              <button type="submit" class="submit-button">Sign In</button>
-              <div class="container-signin">
+              <button type="submit" class="submit__button">Sign In</button>
+              <div class="container__signin">
                 <a href="#">Forgot Password?</a>
                 <p>
                   No account?
-                  <a
-                    data-toggle="tab"
-                    href="#"
-                    onclick="showSignUpTabAsActive()"
-                    >Create One</a
-                  >
+                  <a data-toggle="tab" href="#" onclick="showSignUpTabAsActive()">Create One</a>
                 </p>
               </div>
             </div>
           </form>
         </div>
-        <div id="Sign-Up" class="form-tabcontent">
+        <div id="Sign-Up" class="form__tabcontent">
           <form method="post">
-          {% csrf_token %}
-            <div class="container-form">
-              <div class="form_message">
-                <h2 class="form_message-h2">Welcome</h2>
-                <p class="form_message-p">Create your account to get started</p>
+            {% csrf_token %}
+            <div class="container__form">
+              <div class="form__message">
+                <h2 class="form__message--h2">Welcome</h2>
+                <p class="form__message--p">Create your account to get started</p>
               </div>
-              <div class="input-container">
+              <div class="container__input">
                 <i class="fa fa-user icon"></i>
-                <input
-                  class="input-field"
-                  type="text"
-                  placeholder="Hospital Name"
-                  name="hospital-name"
-                  id="hospital-name"
-                  required
-                  autocomplete="off"
-                />
+                <input class="container__input--field" type="text" placeholder="Hospital Name" name="hospital-name"
+                  id="hospital-name" required autocomplete="off" />
               </div>
-              <div class="input-container">
+              <div class="container__input">
                 <i class="fas fa-at icon"></i>
-                <input
-                  class="input-field"
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  id="email"
-                  required
-                  autocomplete="off"
-                />
+                <input class="container__input--field" type="email" placeholder="Email" name="email" id="email" required
+                  autocomplete="off" />
               </div>
-              <div class="input-container">
-               <div class="input-container-column">
+              <div class="container__input">
+                <div class="container__input--column">
                   <i class="fas fa-street-view icon"></i>
-                  <input
-                    class="input-field"
-                    type="text"
-                    placeholder="Street,Number"
-                    name="street"
-                    id="street"
-                    required
-                    autocomplete="off"
-                  />
+                  <input class="container__input--field" type="text" placeholder="Street,Number" name="street"
+                    id="street" required autocomplete="off" />
                 </div>
-                <div class="input-container-column">
+                <div class="container__input--column">
                   <i class="fas fa-city icon"></i>
-                  <input
-                    class="input-field"
-                    type="text"
-                    placeholder="City"
-                    name="city"
-                    id="city"
-                    required
-                    autocomplete="off"
-                  />
+                  <input class="container__input--field" type="text" placeholder="City" name="city" id="city" required
+                    autocomplete="off" />
                 </div>
               </div>
-              <div class="input-container">
-                <div class="input-container-column">
+              <div class="container__input">
+                <div class="container__input--column">
                   <i class="fas fa-globe-europe icon"></i>
-                  <input
-                    class="input-field"
-                    type="text"
-                    placeholder="Country"
-                    name="country"
-                    id="country"
-                    required
-                    autocomplete="off"
-                  />
+                  <input class="container__input--field" type="text" placeholder="Country" name="country" id="country"
+                    required autocomplete="off" />
                 </div>
-                <div class="input-container-column">
+                <div class="container__input--column">
                   <i class="fas fa-map-pin icon"></i>
-                  <input
-                    class="input-field"
-                    type="text"
-                    placeholder="Postal Code"
-                    name="postal-code"
-                    id="postal-code"
-                    required
-                    autocomplete="off"
-                  />
+                  <input class="container__input--field" type="text" placeholder="Postal Code" name="postal-code"
+                    id="postal-code" required autocomplete="off" />
                 </div>
               </div>
-              <div class="input-container">
-                <div class="input-container-column">
+              <div class="container__input">
+                <div class="container__input--column">
                   <i class="fa fa-unlock icon"></i>
-                  <input
-                    type="password"
-                    placeholder="Enter Password"
-                    name="password1"
-                    id="password1"
-                    required
-                    autocomplete="off"
-                  />
+                  <input type="password" placeholder="Enter Password" name="password1" id="password1" required
+                    autocomplete="off" />
                 </div>
-                <div class="input-container-column">
+                <div class="container__input--column">
                   <i class="fa fa-unlock icon"></i>
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    name="password2"
-                    id="password2"
-                    required
-                    autocomplete="off"
-                  />
+                  <input type="password" placeholder="Confirm Password" name="password2" id="password2" required
+                    autocomplete="off" />
                 </div>
-                </div>
-              <button type="submit" class="submit-button">Sign Up</button>
-              <div class="container-signin">
+              </div>
+              <button type="submit" class="submit__button">Sign Up</button>
+              <div class="container__signin">
                 <p>
-                  Αlready have an account?<a class
-                    href="#"
-                    onclick="showSignInTabAsActive()"
-                    >Sign In</a
-                  >
+                  Αlready have an account?<a class href="#" onclick="showSignInTabAsActive()">Sign In</a>
                 </p>
               </div>
             </div>
           </form>
         </div>
       </div>
-    </main>
-    <footer class="footer">
-      <div class="footer-row">
-        <div class="footer-div-column">
-          <img src="../../img/logo.png" alt="logo" class="footer-img" />
-          <p class="footer-div-p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </p>
-        </div>
-        <div class="footer-div-row">
-          <div class="footer-div-ul">
-            <a href="">About Us</a>
-            <a href="">Contact</a>
-            <a href="">Support</a>
-          </div>
-        </div>
-        <div class="footer-div-column">
-          <h4 class="footer-div-h2">Contact us</h4>
-          <ul class="footer-div-ul">
-            <li>
-              <a href=""><i class="fas fa-mobile-alt"></i> +88 0123 456 789</a>
-            </li>
-            <li>
-              <a href=""><i class="far fa-envelope"></i> info@demo.com</a>
-            </li>
-          </ul>
-          <div class="footer-social">
-            <a href=""><i class="fab fa-facebook-f"></i></a>
-            <a href=""><i class="fab fa-twitter"></i></a>
-            <a href=""><i class="fab fa-linkedin-in"></i></a>
-          </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-row">
+      <div class="footer-div-column">
+        <img src="{% static 'img/logo.png' %}" alt="logo" class="footer-img" />
+        <p class="footer-div-p">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+      </div>
+
+      <div class="footer-div-column">
+        <h4 class="footer-div-h2">Contact us</h4>
+        <ul class="footer-div-ul">
+          <li>
+            <a href=""><i class="fas fa-mobile-alt"></i> +88 0123 456 789</a>
+          </li>
+          <li>
+            <a href=""><i class="far fa-envelope"></i> info@demo.com</a>
+          </li>
+        </ul>
+        <div class="footer-social">
+          <a href=""><i class="fab fa-facebook-f"></i></a>
+          <a href=""><i class="fab fa-twitter"></i></a>
+          <a href=""><i class="fab fa-linkedin-in"></i></a>
         </div>
       </div>
-        <div class="footer-row-copy">
-          <p>&copy; 2020 all rights reserved</p>
-      <div>  
-    </footer>
+    </div>
+    <div class="footer-row-copy">
+      <p>&copy; 2021 all rights reserved. Made with &hearts;</p>
+      <div>
+  </footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script>
+    {% if err != None %}
+    toastr["error"]("{{err}}");
+    {% endif %}
+    function openForm(evt, tab) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("form__tabcontent");
 
-    <script>
-      function openForm(evt, tab) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("form-tabcontent");
-
-        for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("form-tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tab).style.display = "flex";
-        evt.currentTarget.className += " active";
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
       }
-
-      function showSignUpTabAsActive() {
-        openForm(event, "Sign-Up");
-        document.getElementById("tab2").className += " active";
+      tablinks = document.getElementsByClassName("form__tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
       }
-      function showSignInTabAsActive() {
-        openForm(event, "Sign-In");
-        document.getElementById("defaultOpen").className += " active";
-      }
+      document.getElementById(tab).style.display = "flex";
+      evt.currentTarget.className += " active";
+    }
 
-      document.getElementById("defaultOpen").click();
-    </script>
-  </body>
+    function showSignUpTabAsActive() {
+      openForm(event, "Sign-Up");
+      document.getElementById("tab2").className += " active";
+    }
+    function showSignInTabAsActive() {
+      openForm(event, "Sign-In");
+      document.getElementById("defaultOpen").className += " active";
+    }
+
+    document.getElementById("defaultOpen").click();
+  </script>
+</body>
+
 </html>
