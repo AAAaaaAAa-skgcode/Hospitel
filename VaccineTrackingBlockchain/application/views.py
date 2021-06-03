@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 import re
 import requests
 import json
+from django.contrib import messages
 
 #BIGCHAIN DB
 from .more_updates import *
@@ -180,7 +181,7 @@ def add_vaccination(request):
         if dose_b == "": 
             dose_b = None
         if dose_b <= dose_a:
-            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            message = "The second dose have to be after the first one."
             context = {'err':message}
             return render(request, 'application/authenticated/add_vaccination.html',context)
 
@@ -196,7 +197,7 @@ def add_vaccination(request):
                 avl_doses_of_vacc.reserved += vaccine.doses
                 avl_doses_of_vacc.save()
             else:
-                message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
+                message = "Τhere is no available doses for:" + vaccine.brand
                 context = {'err':message}
                 return render(request, 'application/authenticated/add_vaccination.html',context)
         create_vaccination(
@@ -218,7 +219,8 @@ def add_vaccination(request):
             dose_b,
             current_hospital.name
         )
-        return redirect("/addVaccination")
+        messages.success(request,"Τhe new vaccination was successfully registered.")
+        return HttpResponseRedirect("/addVaccination")
 
     return render(request, 'application/authenticated/add_vaccination.html')
 
@@ -264,7 +266,7 @@ def update_vaccination(request,amka):
 
        
         if dose_b <= dose_a:
-            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            message = "The second dose have to be after the first one."
             print(message)
             current_vaccintaion_bigchain_record = search_amka(amka)
             vaccination_json = json.loads(current_vaccintaion_bigchain_record)
@@ -290,8 +292,8 @@ def update_vaccination(request,amka):
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
         if status == 'canceled':
-            avl_doses_of_vacc.free_amount += vaccine.doses
-            avl_doses_of_vacc.reserved -= vaccine.doses
+            avl_doses_of_vacc.free_amount += vaccine.doses - int(completed_doses)
+            avl_doses_of_vacc.reserved -= vaccine.doses + int(completed_doses)
             avl_doses_of_vacc.save()
 
         #update BigChain
@@ -310,6 +312,7 @@ def update_vaccination(request,amka):
 
         current_vaccintaion_bigchain_record = search_amka(amka)
         vaccination_json = json.loads(current_vaccintaion_bigchain_record)
+        success_message = "The details have been updated."
         context = {
             'current_amka':vaccination_json[0]['amka'],
             'current_name':vaccination_json[0]['name'],
@@ -325,6 +328,7 @@ def update_vaccination(request,amka):
             'current_completed_doses':int(vaccination_json[0]['completed_doses']),
             'current_status':vaccination_json[0]['status'],
         }
+        messages.success(request,success_message)
         return HttpResponseRedirect('/updateVaccination/'+ssid,context)   
     context = {
         'current_amka':vaccination_json[0]['amka'],
