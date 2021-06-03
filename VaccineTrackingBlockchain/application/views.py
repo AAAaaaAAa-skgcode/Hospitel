@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 import re
 import requests
 import json
+from django.contrib import messages
 
 #BIGCHAIN DB
 from .more_updates import *
@@ -218,7 +219,8 @@ def add_vaccination(request):
             dose_b,
             current_hospital.name
         )
-        return redirect("/addVaccination")
+        messages.success(request,"Ο νέος εμβολιασμός καταχωρήθηκε.")
+        return HttpResponseRedirect("/addVaccination")
 
     return render(request, 'application/authenticated/add_vaccination.html')
 
@@ -310,6 +312,7 @@ def update_vaccination(request,amka):
 
         current_vaccintaion_bigchain_record = search_amka(amka)
         vaccination_json = json.loads(current_vaccintaion_bigchain_record)
+        success_message = "Τα στοιχεία ενημερώθηκαν."
         context = {
             'current_amka':vaccination_json[0]['amka'],
             'current_name':vaccination_json[0]['name'],
@@ -325,6 +328,7 @@ def update_vaccination(request,amka):
             'current_completed_doses':int(vaccination_json[0]['completed_doses']),
             'current_status':vaccination_json[0]['status'],
         }
+        messages.success(request,success_message)
         return HttpResponseRedirect('/updateVaccination/'+ssid,context)   
     context = {
         'current_amka':vaccination_json[0]['amka'],

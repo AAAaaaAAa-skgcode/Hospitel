@@ -109,6 +109,9 @@
                     <div class="container__info">
                         <p class="form__message--p"><i class="far fa-plus-square"></i>Add a new vaccination</p>
                     </div>
+                {% for message in messages %}
+                    <h1 style="color:green">{{message}}</h3>
+                {% endfor %}
                     <form method="post">
                         {% csrf_token %}
                         <div class="container__form">

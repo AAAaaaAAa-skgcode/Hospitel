@@ -98,6 +98,11 @@
         <main>
             <div class="main__container">
                 <h1 style="color:red">{{err}}</h3>
+                <h1 style="color:green">{{success_message}}</h3>
+                {% for message in messages %}
+                    <h1 style="color:green">{{message}}</h3>
+                {% endfor %}
+                
                     <div class="container__info">
                         <p class="form__message--p"><i class="far fa-plus-square"></i>Update the vaccination</p>
                     </div>
