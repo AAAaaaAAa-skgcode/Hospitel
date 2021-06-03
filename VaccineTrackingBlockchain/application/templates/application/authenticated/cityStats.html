@@ -13,8 +13,8 @@
   <link rel="icon" href="{% static 'img/logo.png' %}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
   <link rel="stylesheet"
-    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" <link
+    rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   <link rel="stylesheet" href="{% static 'index.css' %}" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
@@ -120,29 +120,32 @@
         items: [],
         values: [],
       };
+
       var dataURL = "/citystats";
       $.ajax({
         method: "GET",
         url: dataURL,
         success: function (response) {
-          console.log("Response", response);
+          // console.log("Response", response);
 
           for (var i in response) {
             var key = i;
             var value = response[i];
-            console.log(key);
-            console.log(value);
+            // console.log(key);
+            // console.log(value);
 
             state.items.push(key);
             state.values.push(value);
           }
-          console.log("STATE:", state);
+          // console.log("STATE:", state);
 
-          for (var i in Object.keys(state)) {
-            console.log("[", i, "]", state.items[i]);
-            console.log("[", i, "]", state.values[i]);
-          }
+          // for (var i in Object.keys(state)) {
+            // console.log("[", i, "]", state.items[i]);
+            // console.log("[", i, "]", state.values[i]);
+          // }
+
           let myChart = document.getElementById("myChart").getContext("2d");
+
           // Global Options
           Chart.defaults.global.defaultFontFamily = "Lato";
           Chart.defaults.global.defaultFontSize = 18;
@@ -155,7 +158,6 @@
                 {
                   label: "Amount Of Vaccinations",
                   data: state.values,
-                  backgroundColor: 'green',
                   backgroundColor: [
                     "rgba(255, 99, 132, 0.6)",
                     "rgba(54, 162, 235, 0.6)",
@@ -175,7 +177,7 @@
             options: {
               title: {
                 display: true,
-                text: "Amount of Vaccinations per Countrie",
+                text: "Amount of Vaccinations Per City",
                 fontSize: 25,
               },
               legend: {

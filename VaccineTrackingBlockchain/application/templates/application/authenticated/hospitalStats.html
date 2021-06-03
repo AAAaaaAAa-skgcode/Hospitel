@@ -126,23 +126,23 @@
         method: "GET",
         url: dataURL,
         success: function (response) {
-          console.log("Response", response);
+          // console.log("Response", response);
 
           for (var i in response) {
             var key = i;
             var value = response[i];
-            console.log(key);
-            console.log(value);
+            // console.log(key);
+            // console.log(value);
 
             state.items.push(key);
             state.values.push(value);
           }
-          console.log("STATE:", state);
+          // console.log("STATE:", state);
 
-          for (var i in Object.keys(state)) {
-            console.log("[", i, "]", state.items[i]);
-            console.log("[", i, "]", state.values[i]);
-          }
+          // for (var i in Object.keys(state)) {
+            // console.log("[", i, "]", state.items[i]);
+            // console.log("[", i, "]", state.values[i]);
+          // }
 
           let myChart = document.getElementById("myChart").getContext("2d");
 
