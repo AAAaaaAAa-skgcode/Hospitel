@@ -180,7 +180,7 @@ def add_vaccination(request):
         symptoms = request.POST.get('symptoms')
         if dose_b == "": 
             dose_b = None
-        if dose_b <= dose_a:
+        elif dose_b <= dose_a:
             message = "The second dose have to be after the first one."
             context = {'err':message}
             return render(request, 'application/authenticated/add_vaccination.html',context)
