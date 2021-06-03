@@ -113,14 +113,14 @@
                                         <i class="far fa-id-badge icon"></i></i>
                                         <input class="container__input--field" type="text" placeholder="A.M.K.A"
                                             name="amka" id="amka" value="{{current_amka}}" maxlength="11" minlength="11"
-                                            required readonly disabled autocomplete="off" />
+                                            required readonly autocomplete="off" />
                                     </div>
                                 </div>
                                 <div class="container__input">
                                     <div class="container__input--column">
                                         <i class="far fa-user icon"></i>
                                         <input class="container__input--field" type="text" placeholder="Full Name"
-                                            name="fname" id="fname" value="{{current_name}}" readonly disabled required
+                                            name="fname" id="fname" value="{{current_name}}" readonly required
                                             autocomplete="off" />
                                     </div>
                                 </div>
@@ -128,13 +128,13 @@
                                     <div class="container__input--column">
                                         <i class="fas fa-transgender icon"></i>
                                         <input class="container__input--field" type="text" placeholder="FUll Name"
-                                            name="mySelect" id="mySelect" value="{{current_gender}}" readonly disabled
+                                            name="mySelect" id="mySelect" value="{{current_gender}}" readonly
                                             required autocomplete="off" />
                                     </div>
                                     <div class="container__input--column">
                                         <i class="far fa-user icon"></i>
                                         <input class="container__input--field" type="number" placeholder="Age"
-                                            name="age" id="age" value="{{current_age}}" readonly disabled required
+                                            name="age" id="age" value="{{current_age}}" readonly required
                                             autocomplete="off" />
                                     </div>
                                 </div>
@@ -145,13 +145,13 @@
                                     <div class="container__input--column">
                                         <i class="fas fa-street-view icon"></i>
                                         <input class="container__input--field" type="text" placeholder="Street,Number"
-                                            name="street" id="street" value="{{current_address}}" readonly disabled
+                                            name="street" id="street" value="{{current_address}}" readonly
                                             autocomplete="off" />
                                     </div>
                                     <div class="container__input--column">
                                         <i class="fas fa-city icon"></i>
                                         <input class="container__input--field" type="text" placeholder="City"
-                                            name="city" id="city" value="{{current_city}}" readonly disabled required
+                                            name="city" id="city" value="{{current_city}}" readonly required
                                             autocomplete="off" />
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
                                     <div class="container__input--column">
                                         <i class="fas fa-globe-europe icon"></i>
                                         <input class="container__input--field" type="text" placeholder="Country"
-                                            name="country" id="country" value="{{current_country}}" readonly disabled
+                                            name="country" id="country" value="{{current_country}}" readonly
                                             required autocomplete="off" />
                                     </div>
                                 </div>
@@ -221,8 +221,8 @@
                                         <label for="compldoses">Completed Doses</label>
                                         <i class="fas fa-mouse-pointer icon"></i>
                                         <select id="compldoses" name="compldoses">
-                                            {% if current_completed_doses == "" %}
-                                            <option value="" selected>Select</option>
+                                            {% if current_completed_doses == 0 %}
+                                            <option value="">Select</option>
                                             <option value=0 selected>0</option>
                                             <option value=1>1</option>
                                             <option value=2>2</option>
