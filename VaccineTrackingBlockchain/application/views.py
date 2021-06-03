@@ -181,7 +181,7 @@ def add_vaccination(request):
         if dose_b == "": 
             dose_b = None
         if dose_b <= dose_a:
-            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            message = "The second dose have to be after the first one."
             context = {'err':message}
             return render(request, 'application/authenticated/add_vaccination.html',context)
 
@@ -197,7 +197,7 @@ def add_vaccination(request):
                 avl_doses_of_vacc.reserved += vaccine.doses
                 avl_doses_of_vacc.save()
             else:
-                message = "Δεν υπάρχουν διαθέσιμες δόσεις για το εμβόλιο: " + vaccine.brand
+                message = "Τhere is no available doses for:" + vaccine.brand
                 context = {'err':message}
                 return render(request, 'application/authenticated/add_vaccination.html',context)
         create_vaccination(
@@ -219,7 +219,7 @@ def add_vaccination(request):
             dose_b,
             current_hospital.name
         )
-        messages.success(request,"Ο νέος εμβολιασμός καταχωρήθηκε.")
+        messages.success(request,"Τhe new vaccination was successfully registered.")
         return HttpResponseRedirect("/addVaccination")
 
     return render(request, 'application/authenticated/add_vaccination.html')
@@ -266,7 +266,7 @@ def update_vaccination(request,amka):
 
        
         if dose_b <= dose_a:
-            message = "Η 2η δόση πρέπει να είναι μετά την 1η "
+            message = "The second dose have to be after the first one."
             print(message)
             current_vaccintaion_bigchain_record = search_amka(amka)
             vaccination_json = json.loads(current_vaccintaion_bigchain_record)
@@ -312,7 +312,7 @@ def update_vaccination(request,amka):
 
         current_vaccintaion_bigchain_record = search_amka(amka)
         vaccination_json = json.loads(current_vaccintaion_bigchain_record)
-        success_message = "Τα στοιχεία ενημερώθηκαν."
+        success_message = "The details have been updated."
         context = {
             'current_amka':vaccination_json[0]['amka'],
             'current_name':vaccination_json[0]['name'],
