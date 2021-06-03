@@ -290,8 +290,8 @@ def update_vaccination(request,amka):
         vaccine = Vaccine.objects.get(brand=vbrand)
         avl_doses_of_vacc = AvailabeVaccines.objects.get(hospital=current_hospital,vaccine=vaccine)
         if status == 'canceled':
-            avl_doses_of_vacc.free_amount += vaccine.doses
-            avl_doses_of_vacc.reserved -= vaccine.doses
+            avl_doses_of_vacc.free_amount += vaccine.doses - int(completed_doses)
+            avl_doses_of_vacc.reserved -= vaccine.doses + int(completed_doses)
             avl_doses_of_vacc.save()
 
         #update BigChain
